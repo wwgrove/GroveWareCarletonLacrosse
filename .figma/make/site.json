@@ -1,1 +1,10 @@
-{}
+{
+  "description": "Displays an interactive, single-page roster and staff contacts for Carleton men's lacrosse with seamless tabbed navigation and branded animations.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
