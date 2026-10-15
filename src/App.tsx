@@ -223,7 +223,7 @@ export default function App() {
           <div className="hero-line" />
           <div className="hero-content reveal is-visible">
             <div className="eyebrow">CARLETON RAVENS · MEN’S CLUB SPORT</div>
-            <h1>MENSLACROSSE</h1>
+            <h1>MENS LACROSSE</h1>
           </div>
           <div className="season-mark"><strong>CUFLA</strong><span>EAST DIVISION</span></div>
         </section>
