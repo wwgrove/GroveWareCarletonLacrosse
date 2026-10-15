@@ -19,6 +19,48 @@ const teamStats = [
   { label: "Penalty minutes", value: "41.5", abbreviation: "PIM" },
 ];
 
+const playerStats = [
+  { number: "9", name: "Jenson White", gp: 6, goals: 14, assists: 1, points: 15, pim: 0 },
+  { number: "66", name: "Cooper Delorey", gp: 7, goals: 6, assists: 6, points: 12, pim: 0.5 },
+  { number: "21", name: "Griffin Armstrong", gp: 7, goals: 5, assists: 5, points: 10, pim: 2 },
+  { number: "44", name: "Logan Grant", gp: 7, goals: 4, assists: 5, points: 9, pim: 2.5 },
+  { number: "2", name: "Lucas Haddaway", gp: 7, goals: 2, assists: 2, points: 4, pim: 1 },
+  { number: "12", name: "Joshua Sweet", gp: 7, goals: 2, assists: 2, points: 4, pim: 5 },
+  { number: "15", name: "Jack Mullen", gp: 7, goals: 2, assists: 1, points: 3, pim: 0 },
+  { number: "14", name: "Terrance Barrina", gp: 6, goals: 1, assists: 0, points: 1, pim: 2.5 },
+  { number: "25", name: "Josh Brunton", gp: 7, goals: 0, assists: 1, points: 1, pim: 2.5 },
+  { number: "13", name: "Austin Fraser", gp: 7, goals: 1, assists: 0, points: 1, pim: 1 },
+  { number: "17", name: "Kian McGuigan", gp: 7, goals: 0, assists: 1, points: 1, pim: 1.5 },
+  { number: "6", name: "Liam O’Hagan", gp: 7, goals: 0, assists: 1, points: 1, pim: 0 },
+  { number: "35", name: "Jonah Steenbakkers", gp: 7, goals: 1, assists: 0, points: 1, pim: 0 },
+  { number: "27", name: "Noah Barker", gp: 0, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "31", name: "Alex D’Angelo", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "88", name: "Chris Edel", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "20", name: "Hayden Grant", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "19", name: "Elliot Holt", gp: 4, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "27", name: "Ryan McDonald", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "3", name: "Matthew Melo", gp: 2, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "28", name: "Jacob Nassar", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "16", name: "Ryan Perry", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "29", name: "Evan Rheaume", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "23", name: "Jack Richards", gp: 7, goals: 0, assists: 0, points: 0, pim: 2 },
+  { number: "86", name: "Chris Scissons", gp: 7, goals: 0, assists: 0, points: 0, pim: 10.5 },
+  { number: "55", name: "Carter Smith", gp: 7, goals: 0, assists: 0, points: 0, pim: 10.5 },
+];
+
+const schedule = [
+  { date: "Sep 9, 2026", opponent: "Trent", venue: "Justin Chiu Stadium", game: "1", home: false, result: "L 8–17" },
+  { date: "Sep 13, 2026", opponent: "McGill", venue: "Raven’s Road Field", game: "7", home: true, result: "L 6–17" },
+  { date: "Sep 18, 2026", opponent: "Ottawa", venue: "Gee-Gees Field", game: "12", home: false, result: "L 1–17" },
+  { date: "Sep 26, 2026", opponent: "Trent", venue: "Raven’s Road Field", game: "22", home: true, result: "L 5–14" },
+  { date: "Sep 27, 2026", opponent: "Ottawa", venue: "Raven’s Road Field", game: "27", home: true, result: "L 9–21" },
+  { date: "Oct 3, 2026", opponent: "Bishop’s", venue: "Coulter Field", game: "35", home: false, result: "L 2–14" },
+  { date: "Oct 9, 2026", opponent: "Queen’s", venue: "Raven’s Road Field", game: "37", home: true, result: "L 7–13" },
+  { date: "Oct 16, 2026", opponent: "McGill", venue: "Molson Stadium", game: "45", home: false, result: "8:00 PM" },
+  { date: "Oct 23, 2026", opponent: "Queen’s", venue: "MikMac Field", game: "54", home: false, result: "7:00 PM" },
+  { date: "Oct 24, 2026", opponent: "Bishop’s", venue: "Raven’s Road Field", game: "57", home: true, result: "2:00 PM" },
+];
+
 const roster = [
   { number: "2", name: "Lucas Haddaway", position: "—" },
   { number: "3", name: "Matthew Melo", position: "M" },
@@ -252,6 +294,36 @@ function Stats() {
         ))}
       </div>
 
+      <div className="subsection-heading">
+        <div><span>INDIVIDUAL LEADERS</span><h3>PLAYER STATISTICS</h3></div>
+        <p>Sorted by total points</p>
+      </div>
+      <div className="player-stats-table" role="table" aria-label="Carleton Ravens individual player statistics">
+        <div className="player-stat-row player-stat-head" role="row">
+          <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">GP</span><span role="columnheader">G</span><span role="columnheader">A</span><span role="columnheader">PTS</span><span role="columnheader">PIM</span>
+        </div>
+        {playerStats.map((player) => (
+          <div className="player-stat-row" role="row" key={`${player.number}-${player.name}`}>
+            <span role="cell" className="jersey-number">{player.number}</span>
+            <span role="cell" className="player-name">{player.name}</span>
+            <span role="cell">{player.gp}</span><span role="cell">{player.goals}</span><span role="cell">{player.assists}</span>
+            <strong role="cell">{player.points}</strong><span role="cell">{player.pim}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="subsection-heading goalie-heading">
+        <div><span>GOALTENDING</span><h3>LIAM CLARK <small>#33</small></h3></div>
+      </div>
+      <div className="goalie-stats">
+        <div><span>GP</span><strong>7</strong><small>Games played</small></div>
+        <div><span>W–L</span><strong>0–7</strong><small>Record</small></div>
+        <div><span>SA</span><strong>120</strong><small>Shots against</small></div>
+        <div><span>SV</span><strong>7</strong><small>Saves</small></div>
+        <div><span>GAA</span><strong>12.11</strong><small>Goals against avg.</small></div>
+        <div><span>SV%</span><strong>.058</strong><small>Save percentage</small></div>
+      </div>
+
       <div className="stats-source">
         <div><span className="live-dot" /><strong>GAMESHEET DATA</strong></div>
         <p>Verified from the supplied CUFLA 2026 Carleton team page · February 2026</p>
@@ -264,14 +336,27 @@ function Schedule() {
   return (
     <section className="data-section reveal">
       <div className="section-heading">
-        <div><div className="eyebrow dark">UPCOMING SEASON</div><h2>SCHEDULE</h2></div>
-        <p>The 2025–26 game schedule has not yet been confirmed. Updates will appear here without sending visitors away from the Ravens page.</p>
+        <div><div className="eyebrow dark">CUFLA 2026</div><h2>SCHEDULE</h2></div>
+        <p>Ten-game regular-season schedule from the supplied Gamesheet team page. All times are shown in Eastern Time.</p>
       </div>
-      <div className="empty-state">
-        <Icon name="calendar" size={40} /><span>SCHEDULE UPDATE</span><h3>THE NEXT CAMPAIGN<br />IS TAKING SHAPE.</h3>
-        <p>Conference dates, opponents, and venues will be posted once confirmed by CUFLA.</p>
-        <a href="mailto:carleton@cufla.ca">Ask about the upcoming season <Icon name="arrow" /></a>
+      <div className="schedule-list" role="table" aria-label="Carleton Ravens 2026 schedule">
+        <div className="schedule-row schedule-head" role="row">
+          <span role="columnheader">Date</span><span role="columnheader">Matchup</span><span role="columnheader">Result / Time</span><span role="columnheader">Location</span><span role="columnheader">Game</span>
+        </div>
+        {schedule.map((game) => (
+          <div className={`schedule-row ${game.result.startsWith("L") ? "is-final" : "is-upcoming"}`} role="row" key={`${game.date}-${game.opponent}`}>
+            <span role="cell" className="schedule-date">{game.date}</span>
+            <span role="cell" className="matchup">
+              <small>{game.home ? "HOME" : "AWAY"}</small>
+              <strong>{game.home ? "vs." : "at"} {game.opponent}</strong>
+            </span>
+            <strong role="cell" className="game-result">{game.result}</strong>
+            <span role="cell">{game.venue}</span>
+            <span role="cell" className="game-number">#{game.game}</span>
+          </div>
+        ))}
       </div>
+      <div className="stats-source"><div><span className="live-dot" /><strong>REGULAR SEASON</strong></div><p>Schedule verified from Gamesheet · Dates and times subject to league updates</p></div>
     </section>
   );
 }
