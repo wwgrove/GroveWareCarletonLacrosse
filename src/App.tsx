@@ -477,9 +477,9 @@ function Staff() {
       </div>
       <div className="source-note"><span className="live-dot" />5 coaches · Verified against CUFLA Gamesheet · February 2026</div>
       <div className="staff-grid">
-        {staff.map((person, index) => (
-          <article className="staff-card" key={person.role}>
-            <div className="staff-placeholder">{String(index + 1).padStart(2, "0")}</div>
+        {staff.map((person) => (
+          <article className="staff-card" key={person.detail}>
+            <div className="staff-placeholder"><img src="/coach-placeholder.svg" alt="" /></div>
             <div><span>{person.role}</span><h3>{person.detail}</h3><p>Direct contact information coming soon.</p></div>
           </article>
         ))}
