@@ -186,8 +186,8 @@ function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map"
 function Wordmark() {
   return (
     <div className="wordmark" aria-label="Carleton Ravens">
-      <img className="wordmark-shield" src="/ravens-shield.svg" alt="" />
-      <img className="wordmark-type" src="/ravens-wordmark.svg" alt="" />
+      <span className="wordmark-bird">R</span>
+      <span><small>CARLETON</small>RAVENS</span>
     </div>
   );
 }
@@ -264,7 +264,6 @@ export default function App() {
       </main>
 
       <footer>
-        <img className="footer-wave" src="/carleton-wave.svg" alt="" />
         <div><Wordmark /><p>1125 Colonel By Drive, Ottawa, ON, K1S 5B6</p></div>
         <div className="footer-mark">GO RAVENS.</div>
       </footer>
@@ -283,10 +282,6 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
           <button className="text-button" type="button" onClick={() => onSelect("roster")}>View the 2025–26 roster <Icon name="arrow" /></button>
         </div>
       </section>
-
-      <div className="wave-divider" aria-hidden="true">
-        <img src="/carleton-wave.svg" alt="" />
-      </div>
 
       <section className="stat-band reveal">
         <div><strong>1986</strong><span>PROGRAM FOUNDED</span></div>
