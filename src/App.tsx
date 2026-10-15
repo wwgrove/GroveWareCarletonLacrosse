@@ -330,7 +330,7 @@ function Roster() {
         <div><div className="eyebrow dark">2025–26 TEAM</div><h2>ROSTER</h2></div>
         <p>Complete player listing from the CUFLA 2026 Gamesheet roster. Unpublished biographical fields remain intentionally blank.</p>
       </div>
-      <div className="source-note"><span className="live-dot" />27 athletes · Verified against CUFLA Gamesheet · February 2026</div>
+      <div className="source-note"><span className="live-dot" />27 athletes · Verified against CUFLA Gamesheet · September 2026</div>
       <div className="roster-table" role="table" aria-label="Carleton Ravens men's lacrosse roster">
         <div className="table-row table-head" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span></div>
         {roster.map((player) => (
@@ -456,7 +456,7 @@ function Stats() {
 
       <div className="stats-source">
         <div><span className="live-dot" /><strong>GAMESHEET DATA</strong></div>
-        <p>Verified from the supplied CUFLA 2026 Carleton team page · February 2026</p>
+        <p>Verified from the supplied CUFLA 2026 Carleton team page · September 2026</p>
       </div>
     </section>
   );
@@ -528,7 +528,7 @@ function Staff() {
         <div><div className="eyebrow dark">TEAM CONTACTS</div><h2>STAFF</h2></div>
         <p>Meet the Carleton Ravens men’s lacrosse coaching, performance, and operations staff for the 2026 season.</p>
       </div>
-      <div className="source-note"><span className="live-dot" />9 team staff · Updated February 2026</div>
+      <div className="source-note"><span className="live-dot" />9 team staff · Updated September 2026</div>
       <div className="staff-grid">
         {staff.map((person) => (
           <article className="staff-card" key={person.detail}>
