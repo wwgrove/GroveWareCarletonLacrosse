@@ -52,7 +52,7 @@ button { cursor: pointer; }
 .primary-button, .text-button, .feature-card button, .feature-card a, .empty-state a, .contact-strip a { display: inline-flex; align-items: center; gap: 18px; border: 0; font-weight: 700; text-decoration: none; }
 .primary-button { padding: 16px 20px; color: var(--white); background: var(--raven-red); transition: gap 180ms ease, background 180ms ease; }
 .primary-button:hover { gap: 26px; background: var(--raven-red-dark); }
-.season-mark { position: absolute; z-index: 3; top: 48px; right: clamp(24px, 6vw, 90px); bottom: auto; display: flex; width: 170px; flex-direction: column; padding: 20px; border: 1px solid rgba(255,255,255,.6); color: var(--white); background: rgba(0,0,0,.72); backdrop-filter: blur(8px); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+.season-mark { position: absolute; z-index: 3; top: 48px; right: clamp(24px, 6vw, 90px); bottom: auto; display: flex; width: 170px; flex-direction: column; padding: 20px; color: var(--white); background: rgba(0,0,0,.72); backdrop-filter: blur(8px); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 .season-mark small, .season-mark span { font-size: 11px; letter-spacing: .16em; }
 .season-mark strong { margin: 3px 0; font-size: 31px; font-style: italic; }
 

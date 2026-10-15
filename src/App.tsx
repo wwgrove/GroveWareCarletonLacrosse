@@ -225,7 +225,7 @@ export default function App() {
             <div className="eyebrow">CARLETON RAVENS · MEN’S CLUB SPORT</div>
             <h1>MENSLACROSSE</h1>
           </div>
-          <div className="season-mark"><small>2025–26</small><strong>CUFLA</strong><span>EAST DIVISION</span></div>
+          <div className="season-mark"><strong>CUFLA</strong><span>EAST DIVISION</span></div>
         </section>
 
         <section className="team-nav-wrap" id="team-content">
