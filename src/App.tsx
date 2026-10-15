@@ -330,7 +330,7 @@ function Stats() {
       <div className="stats-scoreboard">
         <div className="record-block">
           <span>Current record</span>
-          <strong>0–7</strong>
+          <strong>0 –7</strong>
           <small>6TH · EAST DIVISION</small>
         </div>
         <div className="headline-stats">
