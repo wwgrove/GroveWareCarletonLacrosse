@@ -193,7 +193,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .team-nav-wrap { position: relative; flex-direction: column; }
   .team-title { min-width: auto; clip-path: none; }
   .team-tabs { overflow-x: auto; padding-right: 0; }
-  .team-tabs button { min-width: 100px; height: 62px; }
+  .team-tabs button { min-width: max-content; height: 62px; flex: 0 0 auto; padding: 0 22px; white-space: nowrap; }
   .intro-section, .section-heading { grid-template-columns: 1fr; }
   .stat-band { grid-template-columns: repeat(2,1fr); }
   .info-grid, .staff-grid { grid-template-columns: 1fr; }
