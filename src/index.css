@@ -83,9 +83,11 @@ button { cursor: pointer; }
 .feature-card { position: relative; display: flex; min-height: 520px; flex-direction: column; padding: 50px clamp(28px,4vw,60px); border-right: 1px solid var(--line); background: var(--white); }
 .feature-card > svg { color: var(--raven-red); }
 .feature-card h3, .staff-card h3 { margin: 72px 0 14px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 34px; font-weight: 800; }
-.feature-card p { margin-bottom: 32px; color: #696865; line-height: 1.7; }
+.feature-card h3 { min-height: 2.4em; line-height: 1.2; letter-spacing: -.025em; }
+.feature-card p { margin-top: 0; margin-bottom: 32px; color: #696865; font-size: 16px; font-weight: 400; line-height: 1.7; }
 .feature-card a, .feature-card button, .card-link { position: static; width: 100%; justify-content: space-between; margin-top: auto; padding: 10px 0; border: 0; border-bottom: 1px solid currentColor; color: inherit; background: transparent; font-size: 14px; }
 .feature-card a { overflow-wrap: anywhere; }
+.card-link { display: flex; align-items: center; font-weight: 700; }
 .card-number { position: absolute; top: 50px; right: 50px; color: #aaa; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 .red-card { color: var(--white); background: var(--raven-red); }
 .red-card > svg, .dark-card > svg, .red-card p, .dark-card p { color: inherit; }
