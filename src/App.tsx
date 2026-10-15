@@ -231,7 +231,7 @@ export default function App() {
 
       <main>
         <section className="hero">
-          <img className="hero-image" src="https://images.unsplash.com/photo-1746826092606-ffbcac530b89?auto=format&fit=crop&w=2000&q=88" alt="Lacrosse players competing for the ball during a game" />
+          <img className="hero-image" src="/ravens-lacrosse-hero.jpg" alt="A Carleton Ravens lacrosse player carrying the ball past an Ottawa defender" />
           <div className="hero-overlay" />
           <div className="hero-line" />
           <div className="hero-content reveal is-visible">
@@ -441,7 +441,7 @@ function Schedule() {
       </div>
       <div className="schedule-list" role="table" aria-label="Carleton Ravens 2026 schedule">
         <div className="schedule-row schedule-head" role="row">
-          <span role="columnheader">Date</span><span role="columnheader">Matchup</span><span role="columnheader">Result / Time</span><span role="columnheader">Location</span><span role="columnheader">Game</span>
+          <span role="columnheader">Date</span><span role="columnheader">Matchup</span><span role="columnheader">Result / Time</span><span role="columnheader">Location</span>
         </div>
         {games.map((game) => (
           <div className={`schedule-row ${game.result.startsWith("L") ? "is-final" : "is-upcoming"}`} role="row" key={`${game.date}-${game.opponent}`}>
@@ -452,7 +452,6 @@ function Schedule() {
             </span>
             <strong role="cell" className="game-result">{game.result}</strong>
             <span role="cell">{game.venue}</span>
-            <span role="cell" className="game-number">#{game.game}</span>
           </div>
         ))}
       </div>
