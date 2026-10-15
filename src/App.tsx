@@ -1,6 +1,28 @@
 import { useEffect, useState } from "react";
 
 type Tab = "overview" | "roster" | "stats" | "schedule" | "staff";
+type ScheduleGame = {
+  date: string;
+  opponent: string;
+  venue: string;
+  game: string;
+  home: boolean;
+  result: string;
+};
+
+type GamesheetGame = {
+  number: string;
+  date: string;
+  time: string;
+  status: string;
+  location: string;
+  visitor: { id: number; title: string; goals: number; result: string };
+  home: { id: number; title: string; goals: number; result: string };
+};
+
+const CARLETON_TEAM_ID = 550883;
+const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
+const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -48,7 +70,7 @@ const playerStats = [
   { number: "55", name: "Carter Smith", gp: 7, goals: 0, assists: 0, points: 0, pim: 10.5 },
 ];
 
-const schedule = [
+const scheduleFallback: ScheduleGame[] = [
   { date: "Sep 9, 2026", opponent: "Trent", venue: "Justin Chiu Stadium", game: "1", home: false, result: "L 8–17" },
   { date: "Sep 13, 2026", opponent: "McGill", venue: "Raven’s Road Field", game: "7", home: true, result: "L 6–17" },
   { date: "Sep 18, 2026", opponent: "Ottawa", venue: "Gee-Gees Field", game: "12", home: false, result: "L 1–17" },
@@ -60,6 +82,55 @@ const schedule = [
   { date: "Oct 23, 2026", opponent: "Queen’s", venue: "MikMac Field", game: "54", home: false, result: "7:00 PM" },
   { date: "Oct 24, 2026", opponent: "Bishop’s", venue: "Raven’s Road Field", game: "57", home: true, result: "2:00 PM" },
 ];
+
+function extractGamesheetGames(html: string): GamesheetGame[] {
+  const marker = "[{\\\"gameId\\\"";
+  const start = html.indexOf(marker);
+  if (start === -1) throw new Error("Gamesheet schedule payload was not found");
+
+  const source = html.slice(start).replaceAll("\\\"", "\"");
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (character === "\\") escaped = true;
+      else if (character === "\"") inString = false;
+      continue;
+    }
+    if (character === "\"") inString = true;
+    else if (character === "[") depth += 1;
+    else if (character === "]") {
+      depth -= 1;
+      if (depth === 0) return JSON.parse(source.slice(0, index + 1)) as GamesheetGame[];
+    }
+  }
+
+  throw new Error("Gamesheet schedule payload was incomplete");
+}
+
+function normalizeSchedule(games: GamesheetGame[]): ScheduleGame[] {
+  return games.map((game) => {
+    const home = game.home.id === CARLETON_TEAM_ID;
+    const ravens = home ? game.home : game.visitor;
+    const opponent = home ? game.visitor : game.home;
+    const result = game.status === "final"
+      ? `${ravens.result} ${ravens.goals}–${opponent.goals}`
+      : game.time;
+
+    return {
+      date: game.date,
+      opponent: opponent.title,
+      venue: game.location,
+      game: game.number,
+      home,
+      result,
+    };
+  });
+}
 
 const roster = [
   { number: "2", name: "Lucas Haddaway", position: "—" },
@@ -334,6 +405,34 @@ function Stats() {
 }
 
 function Schedule() {
+  const [games, setGames] = useState<ScheduleGame[]>(scheduleFallback);
+  const [feedStatus, setFeedStatus] = useState<"loading" | "live" | "fallback">("loading");
+
+  useEffect(() => {
+    let active = true;
+
+    async function refreshSchedule() {
+      try {
+        const response = await fetch(GAMESHEET_SCHEDULE_SOURCE, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Gamesheet returned ${response.status}`);
+        const nextGames = normalizeSchedule(extractGamesheetGames(await response.text()));
+        if (active && nextGames.length > 0) {
+          setGames(nextGames);
+          setFeedStatus("live");
+        }
+      } catch {
+        if (active) setFeedStatus("fallback");
+      }
+    }
+
+    refreshSchedule();
+    const refreshTimer = window.setInterval(refreshSchedule, 5 * 60 * 1000);
+    return () => {
+      active = false;
+      window.clearInterval(refreshTimer);
+    };
+  }, []);
+
   return (
     <section className="data-section reveal">
       <div className="section-heading">
@@ -344,7 +443,7 @@ function Schedule() {
         <div className="schedule-row schedule-head" role="row">
           <span role="columnheader">Date</span><span role="columnheader">Matchup</span><span role="columnheader">Result / Time</span><span role="columnheader">Location</span><span role="columnheader">Game</span>
         </div>
-        {schedule.map((game) => (
+        {games.map((game) => (
           <div className={`schedule-row ${game.result.startsWith("L") ? "is-final" : "is-upcoming"}`} role="row" key={`${game.date}-${game.opponent}`}>
             <span role="cell" className="schedule-date">{game.date}</span>
             <span role="cell" className="matchup">
@@ -357,7 +456,10 @@ function Schedule() {
           </div>
         ))}
       </div>
-      <div className="stats-source"><div><span className="live-dot" /><strong>REGULAR SEASON</strong></div><p>Schedule verified from Gamesheet · Dates and times subject to league updates</p></div>
+      <div className="stats-source">
+        <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET FEED" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
+        <p>{feedStatus === "live" ? "Automatically refreshes every five minutes" : "The last verified schedule is shown while the live feed is unavailable"}</p>
+      </div>
     </section>
   );
 }
