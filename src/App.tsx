@@ -21,6 +21,22 @@ const roster = [
   { number: "16", name: "Ryan Perry", position: "D" },
   { number: "17", name: "Kian McGuigan", position: "F" },
   { number: "19", name: "Elliot Holt", position: "—" },
+  { number: "20", name: "Hayden Grant", position: "D" },
+  { number: "21", name: "Griffin Armstrong", position: "—" },
+  { number: "23", name: "Jack Richards", position: "—" },
+  { number: "25", name: "Josh Brunton", position: "F" },
+  { number: "27", name: "Noah Barker", position: "—" },
+  { number: "27", name: "Ryan McDonald", position: "M" },
+  { number: "28", name: "Jacob Nassar", position: "D" },
+  { number: "29", name: "Evan Rheaume", position: "—" },
+  { number: "31", name: "Alex D’Angelo", position: "D" },
+  { number: "33", name: "Liam Clark", position: "G" },
+  { number: "35", name: "Jonah Steenbakkers", position: "—" },
+  { number: "44", name: "Logan Grant", position: "—" },
+  { number: "55", name: "Carter Smith", position: "D" },
+  { number: "66", name: "Cooper Delorey", position: "A" },
+  { number: "86", name: "Chris Scissons", position: "D" },
+  { number: "88", name: "Chris Edel", position: "D" },
 ];
 
 const staff = [
@@ -175,9 +191,9 @@ function Roster() {
     <section className="data-section reveal">
       <div className="section-heading">
         <div><div className="eyebrow dark">2025–26 TEAM</div><h2>ROSTER</h2></div>
-        <p>Player information shown from the supplied CUFLA Gamesheet reference. Missing fields remain intentionally blank until the official feed is confirmed.</p>
+        <p>Complete player listing from the CUFLA 2026 Gamesheet roster. Unpublished biographical fields remain intentionally blank.</p>
       </div>
-      <div className="source-note"><span className="live-dot" />CUFLA roster reference · Last reviewed February 2026</div>
+      <div className="source-note"><span className="live-dot" />27 athletes · Verified against CUFLA Gamesheet · February 2026</div>
       <div className="roster-table" role="table" aria-label="Carleton Ravens men's lacrosse roster">
         <div className="table-row table-head" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">Position</span><span role="columnheader">Year</span><span role="columnheader">Hometown</span></div>
         {roster.map((player) => (
@@ -188,7 +204,7 @@ function Roster() {
           </div>
         ))}
       </div>
-      <p className="data-disclaimer">This is the verified portion visible in the provided CUFLA reference. The roster is structured for a direct feed or additional player records when supplied.</p>
+      <p className="data-disclaimer">Roster names, numbers, and listed positions match the supplied CUFLA Gamesheet source. Year and hometown will remain blank until published by the league or team.</p>
     </section>
   );
 }
