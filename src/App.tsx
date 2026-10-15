@@ -260,7 +260,7 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
   return (
     <>
       <section className="intro-section reveal">
-        <div><div className="eyebrow dark">THE PROGRAM</div><h2>A TRADITION<br />SINCE 1986.</h2></div>
+        <div><div className="eyebrow dark">THE PROGRAM</div><h2><span>A TRADITION</span><span>SINCE 1986.</span></h2></div>
         <div className="intro-copy">
           <p className="lead">Carleton Ravens Lacrosse competes in the Canadian University Field Lacrosse Association, bringing together high-level competition, academic ambition, and a proud club tradition.</p>
           <p>The program was formed in 1986 for the first Ontario University Field Lacrosse Association spring tournament. Today, the Ravens compete in CUFLA’s East Division and pursue a place at the Baggataway Cup championship.</p>
