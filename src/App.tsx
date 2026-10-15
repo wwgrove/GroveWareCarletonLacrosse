@@ -133,33 +133,33 @@ function normalizeSchedule(games: GamesheetGame[]): ScheduleGame[] {
 }
 
 const roster = [
-  { number: "2", name: "Lucas Haddaway", position: "—" },
-  { number: "3", name: "Matthew Melo", position: "M" },
-  { number: "6", name: "Liam O’Hagan", position: "—" },
-  { number: "9", name: "Jenson White", position: "—" },
-  { number: "12", name: "Joshua Sweet", position: "—" },
-  { number: "13", name: "Austin Fraser", position: "D" },
-  { number: "14", name: "Terrance Barrina", position: "D" },
-  { number: "15", name: "Jack Mullen", position: "—" },
-  { number: "16", name: "Ryan Perry", position: "D" },
-  { number: "17", name: "Kian McGuigan", position: "F" },
-  { number: "19", name: "Elliot Holt", position: "—" },
-  { number: "20", name: "Hayden Grant", position: "D" },
-  { number: "21", name: "Griffin Armstrong", position: "—" },
-  { number: "23", name: "Jack Richards", position: "—" },
-  { number: "25", name: "Josh Brunton", position: "F" },
-  { number: "27", name: "Noah Barker", position: "—" },
-  { number: "27", name: "Ryan McDonald", position: "M" },
-  { number: "28", name: "Jacob Nassar", position: "D" },
-  { number: "29", name: "Evan Rheaume", position: "—" },
-  { number: "31", name: "Alex D’Angelo", position: "D" },
-  { number: "33", name: "Liam Clark", position: "G" },
-  { number: "35", name: "Jonah Steenbakkers", position: "—" },
-  { number: "44", name: "Logan Grant", position: "—" },
-  { number: "55", name: "Carter Smith", position: "D" },
-  { number: "66", name: "Cooper Delorey", position: "A" },
-  { number: "86", name: "Chris Scissons", position: "D" },
-  { number: "88", name: "Chris Edel", position: "D" },
+  { number: "2", name: "Lucas Haddaway" },
+  { number: "3", name: "Matthew Melo" },
+  { number: "6", name: "Liam O’Hagan" },
+  { number: "9", name: "Jenson White" },
+  { number: "12", name: "Joshua Sweet" },
+  { number: "13", name: "Austin Fraser" },
+  { number: "14", name: "Terrance Barrina" },
+  { number: "15", name: "Jack Mullen" },
+  { number: "16", name: "Ryan Perry" },
+  { number: "17", name: "Kian McGuigan" },
+  { number: "19", name: "Elliot Holt" },
+  { number: "20", name: "Hayden Grant" },
+  { number: "21", name: "Griffin Armstrong" },
+  { number: "23", name: "Jack Richards" },
+  { number: "25", name: "Josh Brunton" },
+  { number: "27", name: "Noah Barker" },
+  { number: "27", name: "Ryan McDonald" },
+  { number: "28", name: "Jacob Nassar" },
+  { number: "29", name: "Evan Rheaume" },
+  { number: "31", name: "Alex D’Angelo" },
+  { number: "33", name: "Liam Clark" },
+  { number: "35", name: "Jonah Steenbakkers" },
+  { number: "44", name: "Logan Grant" },
+  { number: "55", name: "Carter Smith" },
+  { number: "66", name: "Cooper Delorey" },
+  { number: "86", name: "Chris Scissons" },
+  { number: "88", name: "Chris Edel" },
 ];
 
 const staff = [
@@ -305,16 +305,15 @@ function Roster() {
       </div>
       <div className="source-note"><span className="live-dot" />27 athletes · Verified against CUFLA Gamesheet · February 2026</div>
       <div className="roster-table" role="table" aria-label="Carleton Ravens men's lacrosse roster">
-        <div className="table-row table-head" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">Position</span><span role="columnheader">Year</span><span role="columnheader">Hometown</span></div>
+        <div className="table-row table-head" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span></div>
         {roster.map((player) => (
           <div className="table-row" role="row" key={`${player.number}-${player.name}`}>
             <span role="cell" className="jersey-number">{player.number}</span>
             <span role="cell" className="player-name"><span className="avatar">{player.name.split(" ").map((part) => part[0]).join("")}</span>{player.name}</span>
-            <span role="cell">{player.position}</span><span role="cell">—</span><span role="cell">—</span>
           </div>
         ))}
       </div>
-      <p className="data-disclaimer">Roster names, numbers, and listed positions match the supplied CUFLA Gamesheet source. Year and hometown will remain blank until published by the league or team.</p>
+      <p className="data-disclaimer">Roster names and jersey numbers match the supplied CUFLA Gamesheet source.</p>
     </section>
   );
 }
