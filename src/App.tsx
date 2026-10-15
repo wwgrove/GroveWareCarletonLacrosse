@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
 
-type Tab = "overview" | "roster" | "schedule" | "staff";
+type Tab = "overview" | "roster" | "stats" | "schedule" | "staff";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "roster", label: "Roster" },
+  { id: "stats", label: "Stats" },
   { id: "schedule", label: "Schedule" },
   { id: "staff", label: "Staff" },
+];
+
+const teamStats = [
+  { label: "Games played", value: "7", abbreviation: "GP" },
+  { label: "Goals for", value: "38", abbreviation: "GF" },
+  { label: "Goals against", value: "113", abbreviation: "GA" },
+  { label: "Goal differential", value: "−75", abbreviation: "DIFF" },
+  { label: "League points", value: "0", abbreviation: "PTS" },
+  { label: "Penalty minutes", value: "41.5", abbreviation: "PIM" },
 ];
 
 const roster = [
@@ -133,6 +143,7 @@ export default function App() {
         <div className="tab-panel" role="tabpanel" key={activeTab}>
           {activeTab === "overview" && <Overview onSelect={selectTab} />}
           {activeTab === "roster" && <Roster />}
+          {activeTab === "stats" && <Stats />}
           {activeTab === "schedule" && <Schedule />}
           {activeTab === "staff" && <Staff />}
         </div>
@@ -205,6 +216,46 @@ function Roster() {
         ))}
       </div>
       <p className="data-disclaimer">Roster names, numbers, and listed positions match the supplied CUFLA Gamesheet source. Year and hometown will remain blank until published by the league or team.</p>
+    </section>
+  );
+}
+
+function Stats() {
+  return (
+    <section className="data-section reveal">
+      <div className="section-heading stats-heading">
+        <div><div className="eyebrow dark">CUFLA 2026</div><h2>TEAM STATS</h2></div>
+        <p>Current Carleton team statistics taken from the supplied Gamesheet team source. Figures reflect the seven games currently recorded.</p>
+      </div>
+
+      <div className="stats-scoreboard">
+        <div className="record-block">
+          <span>Current record</span>
+          <strong>0–7</strong>
+          <small>6TH · EAST DIVISION</small>
+        </div>
+        <div className="headline-stats">
+          <div><span>Goals / game</span><strong>5.43</strong><small>GPG</small></div>
+          <div><span>Against / game</span><strong>16.14</strong><small>GAPG</small></div>
+          <div><span>Power play goals / game</span><strong>0.14</strong><small>PP GPG</small></div>
+          <div><span>Penalty minutes / game</span><strong>5.9</strong><small>PIM PG</small></div>
+        </div>
+      </div>
+
+      <div className="stats-grid">
+        {teamStats.map((stat) => (
+          <article className="stat-card" key={stat.abbreviation}>
+            <span>{stat.abbreviation}</span>
+            <strong>{stat.value}</strong>
+            <p>{stat.label}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="stats-source">
+        <div><span className="live-dot" /><strong>GAMESHEET DATA</strong></div>
+        <p>Verified from the supplied CUFLA 2026 Carleton team page · February 2026</p>
+      </div>
     </section>
   );
 }
