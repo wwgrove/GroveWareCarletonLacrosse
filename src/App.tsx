@@ -214,19 +214,6 @@ export default function App() {
   return (
     <div className="site-shell">
       <header className="site-header">
-        <div className="utility-bar">
-          <span>HOME OF THE CARLETON UNIVERSITY RAVENS</span>
-          <span className="utility-links">RECREATION &amp; ATHLETICS · CARLETON UNIVERSITY</span>
-        </div>
-        <nav className="main-nav" aria-label="Primary navigation">
-          <Wordmark />
-          <div className={`nav-links ${mobileOpen ? "is-open" : ""}`}>
-            <span>Teams</span><span>Inside the Nest</span><span>Student-Athletes</span><span>Facilities</span><span>Tickets</span>
-          </div>
-          <button className="menu-button" type="button" aria-expanded={mobileOpen} aria-label="Toggle navigation" onClick={() => setMobileOpen((open) => !open)}>
-            <Icon name="menu" size={24} />
-          </button>
-        </nav>
       </header>
 
       <main>
@@ -236,9 +223,7 @@ export default function App() {
           <div className="hero-line" />
           <div className="hero-content reveal is-visible">
             <div className="eyebrow">CARLETON RAVENS · MEN’S CLUB SPORT</div>
-            <h1>MEN’S<br />LACROSSE</h1>
-            <p>Built in Ottawa. Competing across Canada.</p>
-            <button className="primary-button" type="button" onClick={() => selectTab("roster")}>Meet the Ravens <Icon name="arrow" /></button>
+            <h1>MENSLACROSSE</h1>
           </div>
           <div className="season-mark"><small>2025–26</small><strong>CUFLA</strong><span>EAST DIVISION</span></div>
         </section>
