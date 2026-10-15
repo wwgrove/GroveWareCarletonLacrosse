@@ -80,11 +80,12 @@ button { cursor: pointer; }
 .stat-band strong { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: clamp(45px,5vw,70px); font-style: italic; line-height: 1; }
 .stat-band span { margin-top: 8px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .18em; }
 .info-grid { display: grid; grid-template-columns: repeat(3,1fr); }
-.feature-card { position: relative; min-height: 430px; padding: 50px clamp(28px,4vw,60px); border-right: 1px solid var(--line); background: var(--white); }
+.feature-card { position: relative; display: flex; min-height: 520px; flex-direction: column; padding: 50px clamp(28px,4vw,60px); border-right: 1px solid var(--line); background: var(--white); }
 .feature-card > svg { color: var(--raven-red); }
 .feature-card h3, .staff-card h3 { margin: 72px 0 14px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 34px; font-weight: 800; }
-.feature-card p { color: #696865; line-height: 1.7; }
-.feature-card a, .feature-card button, .card-link { position: absolute; right: clamp(28px,4vw,60px); bottom: 48px; left: clamp(28px,4vw,60px); justify-content: space-between; padding: 10px 0; border: 0; border-bottom: 1px solid currentColor; color: inherit; background: transparent; font-size: 14px; }
+.feature-card p { margin-bottom: 32px; color: #696865; line-height: 1.7; }
+.feature-card a, .feature-card button, .card-link { position: static; width: 100%; justify-content: space-between; margin-top: auto; padding: 10px 0; border: 0; border-bottom: 1px solid currentColor; color: inherit; background: transparent; font-size: 14px; }
+.feature-card a { overflow-wrap: anywhere; }
 .card-number { position: absolute; top: 50px; right: 50px; color: #aaa; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 .red-card { color: var(--white); background: var(--raven-red); }
 .red-card > svg, .dark-card > svg, .red-card p, .dark-card p { color: inherit; }
@@ -214,7 +215,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .goalie-stats { grid-template-columns: repeat(3,1fr); }
   .schedule-row { grid-template-columns: 1fr 1.2fr .7fr; }
   .schedule-row > span:nth-child(4) { display: none; }
-  .feature-card { min-height: 390px; }
+  .feature-card { min-height: 430px; }
 }
 
 @media (max-width: 600px) {
