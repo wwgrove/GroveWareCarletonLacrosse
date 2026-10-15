@@ -442,16 +442,16 @@ function Stats() {
         ))}
       </div>
 
-      <div className="subsection-heading goalie-heading">
-        <div><span>GOALTENDING</span><h3>LIAM CLARK <small>#33</small></h3></div>
-      </div>
-      <div className="goalie-stats">
-        <div><span>GP</span><strong>7</strong><small>Games played</small></div>
-        <div><span>W–L</span><strong>0–7</strong><small>Record</small></div>
-        <div><span>SA</span><strong>120</strong><small>Shots against</small></div>
-        <div><span>SV</span><strong>7</strong><small>Saves</small></div>
-        <div><span>GAA</span><strong>12.11</strong><small>Goals against avg.</small></div>
-        <div><span>SV%</span><strong>.058</strong><small>Save percentage</small></div>
+      <div className="goalie-table-heading">GOALTENDING</div>
+      <div className="player-stats-table goalie-stats-table" role="table" aria-label="Carleton Ravens goaltending statistics">
+        <div className="player-stat-row player-stat-head goalie-stat-row" role="row">
+          <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">GP</span><span role="columnheader">W–L</span><span role="columnheader">SA</span><span role="columnheader">SV</span><span role="columnheader">GAA</span><span role="columnheader">SV%</span>
+        </div>
+        <div className="player-stat-row goalie-stat-row goalie-player-row" role="row">
+          <span role="cell" className="jersey-number">33</span>
+          <span role="cell" className="player-name">Liam Clark</span>
+          <span role="cell">7</span><span role="cell">0–7</span><span role="cell">120</span><span role="cell">7</span><span role="cell">12.11</span><span role="cell">.058</span>
+        </div>
       </div>
 
       <div className="stats-source">

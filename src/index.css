@@ -143,12 +143,9 @@ button { cursor: pointer; }
 .stat-sort-button span { color: var(--raven-red); font-size: 14px; }
 .player-stat-row > span:not(.player-name):not(.jersey-number), .player-stat-row > strong { text-align: center; }
 .player-stat-row > strong { color: var(--raven-red); font-size: 16px; }
-.goalie-heading { margin-top: 70px; }
-.goalie-stats { display: grid; grid-template-columns: repeat(6,1fr); color: var(--white); background: var(--ink); border-top: 5px solid var(--raven-red); }
-.goalie-stats > div { display: flex; min-height: 160px; flex-direction: column; justify-content: center; padding: 24px; border-right: 1px solid rgba(255,255,255,.12); }
-.goalie-stats span { color: var(--raven-red); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: .12em; }
-.goalie-stats strong { margin: 8px 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 40px; line-height: 1; }
-.goalie-stats small { color: #929294; font-size: 10px; text-transform: uppercase; }
+.goalie-table-heading { margin: 70px 0 14px; color: var(--raven-red); font-size: 12px; font-weight: 800; letter-spacing: .16em; }
+.goalie-stat-row { grid-template-columns: 76px 2.2fr repeat(6,.55fr); }
+.goalie-player-row { background: #f8f6f3; }
 
 .schedule-list { overflow: hidden; border-top: 5px solid var(--raven-red); background: var(--white); box-shadow: 0 18px 50px rgba(0,0,0,.07); }
 .schedule-row { display: grid; grid-template-columns: 1fr 1.35fr .8fr 1.35fr; min-height: 88px; align-items: center; gap: 20px; padding: 0 28px; border-bottom: 1px solid #e9e7e2; transition: background 180ms ease, transform 180ms ease; }
@@ -214,7 +211,6 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .headline-stats { grid-template-columns: repeat(2,1fr); }
   .headline-stats > div { min-height: 180px; }
   .stats-grid { grid-template-columns: repeat(2,1fr); }
-  .goalie-stats { grid-template-columns: repeat(3,1fr); }
   .schedule-row { grid-template-columns: 1fr 1.2fr .7fr; }
   .schedule-row > span:nth-child(4) { display: none; }
   .feature-card { min-height: 430px; }
@@ -236,7 +232,8 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .subsection-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
   .player-stat-row { grid-template-columns: 48px minmax(94px,1fr) repeat(4,28px); min-height: 52px; column-gap: 6px; padding: 0 10px; font-size: 12px; }
   .player-stat-row > span:last-child { display: none; }
-  .goalie-stats { grid-template-columns: repeat(2,1fr); }
+  .goalie-stat-row { grid-template-columns: 42px minmax(74px,1fr) repeat(4,24px) 34px 30px; min-height: 52px; column-gap: 4px; padding: 0 6px; font-size: 10px; }
+  .goalie-stat-row > span:last-child { display: block; }
   .schedule-row { grid-template-columns: 1fr 1.2fr .7fr; gap: 10px; padding: 0 14px; font-size: 12px; }
 }
 
