@@ -20,6 +20,8 @@ type GamesheetGame = {
   home: { id: number; title: string; goals: number; result: string };
 };
 
+type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
+
 const CARLETON_TEAM_ID = 550883;
 const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
 const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
@@ -344,6 +346,37 @@ function Roster() {
 }
 
 function Stats() {
+  const [playerSort, setPlayerSort] = useState<{ key: PlayerStatSortKey; direction: "asc" | "desc" }>({
+    key: "points",
+    direction: "desc",
+  });
+  const statColumns: { key: PlayerStatSortKey; label: string }[] = [
+    { key: "number", label: "#" },
+    { key: "name", label: "Player" },
+    { key: "gp", label: "GP" },
+    { key: "goals", label: "G" },
+    { key: "assists", label: "A" },
+    { key: "points", label: "PTS" },
+    { key: "pim", label: "PIM" },
+  ];
+  const sortedPlayerStats = [...playerStats].sort((first, second) => {
+    const firstValue = playerSort.key === "number" ? Number(first.number) : first[playerSort.key];
+    const secondValue = playerSort.key === "number" ? Number(second.number) : second[playerSort.key];
+    const comparison = typeof firstValue === "string"
+      ? firstValue.localeCompare(String(secondValue))
+      : Number(firstValue) - Number(secondValue);
+    return playerSort.direction === "asc" ? comparison : -comparison;
+  });
+
+  function sortPlayers(key: PlayerStatSortKey) {
+    setPlayerSort((current) => ({
+      key,
+      direction: current.key === key
+        ? current.direction === "asc" ? "desc" : "asc"
+        : key === "name" || key === "number" ? "asc" : "desc",
+    }));
+  }
+
   return (
     <section className="data-section reveal">
       <div className="section-heading stats-heading">
@@ -377,13 +410,29 @@ function Stats() {
 
       <div className="subsection-heading">
         <div><span>INDIVIDUAL LEADERS</span><h3>PLAYER STATISTICS</h3></div>
-        <p>Sorted by total points</p>
+        <p>Tap a column to sort</p>
       </div>
       <div className="player-stats-table" role="table" aria-label="Carleton Ravens individual player statistics">
         <div className="player-stat-row player-stat-head" role="row">
-          <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">GP</span><span role="columnheader">G</span><span role="columnheader">A</span><span role="columnheader">PTS</span><span role="columnheader">PIM</span>
+          {statColumns.map((column) => (
+            <span
+              key={column.key}
+              role="columnheader"
+              aria-sort={playerSort.key === column.key ? playerSort.direction === "asc" ? "ascending" : "descending" : "none"}
+            >
+              <button
+                className="stat-sort-button"
+                type="button"
+                onClick={() => sortPlayers(column.key)}
+                aria-label={`Sort player statistics by ${column.label}`}
+              >
+                {column.label}
+                {playerSort.key === column.key && <span aria-hidden="true">{playerSort.direction === "asc" ? "↑" : "↓"}</span>}
+              </button>
+            </span>
+          ))}
         </div>
-        {playerStats.map((player) => (
+        {sortedPlayerStats.map((player) => (
           <div className="player-stat-row" role="row" key={`${player.number}-${player.name}`}>
             <span role="cell" className="jersey-number">{player.number}</span>
             <span role="cell" className="player-name">{player.name}</span>

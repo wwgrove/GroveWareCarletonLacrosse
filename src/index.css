@@ -132,6 +132,12 @@ button { cursor: pointer; }
 .player-stat-row { display: grid; grid-template-columns: 76px 2.2fr repeat(5,.55fr); min-height: 62px; align-items: center; column-gap: 20px; padding: 0 26px; border-bottom: 1px solid #e9e7e2; font-size: 14px; transition: background 180ms ease; }
 .player-stat-row:not(.player-stat-head):hover { background: #f8f6f3; }
 .player-stat-head { min-height: 48px; color: var(--white); background: var(--ink); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.stat-sort-button { display: inline-flex; width: 100%; min-height: 48px; align-items: center; justify-content: center; gap: 5px; padding: 0; border: 0; color: inherit; background: transparent; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+.player-stat-head > span:nth-child(1) .stat-sort-button,
+.player-stat-head > span:nth-child(2) .stat-sort-button { justify-content: flex-start; }
+.stat-sort-button:hover { color: var(--raven-red); }
+.stat-sort-button:focus-visible { outline: 2px solid var(--raven-red); outline-offset: -4px; }
+.stat-sort-button span { color: var(--raven-red); font-size: 14px; }
 .player-stat-row > span:not(.player-name):not(.jersey-number), .player-stat-row > strong { text-align: center; }
 .player-stat-row > strong { color: var(--raven-red); font-size: 16px; }
 .goalie-heading { margin-top: 70px; }
