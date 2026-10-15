@@ -211,7 +211,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
 @media (max-width: 600px) {
   .hero { min-height: 560px; }
   .hero-content { padding-bottom: 52px; }
-  .hero h1 { font-size: 72px; }
+  .hero h1 { max-width: 100%; font-size: clamp(50px,15vw,64px); line-height: .9; }
   .intro-section, .data-section { padding-top: 72px; padding-bottom: 72px; }
   .stat-band div { min-height: 135px; }
   .table-row { grid-template-columns: 72px 1fr; column-gap: 14px; padding: 0 20px; }
