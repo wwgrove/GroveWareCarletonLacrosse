@@ -92,10 +92,11 @@ const roster = [
 ];
 
 const staff = [
-  { role: "Head Coach", detail: "To be announced" },
-  { role: "Assistant Coach", detail: "To be announced" },
-  { role: "Team Manager", detail: "To be announced" },
-  { role: "Athletic Therapist", detail: "To be announced" },
+  { role: "Head Coach", detail: "Colin Gallagher" },
+  { role: "Head Coach", detail: "Jacob Gasperetti" },
+  { role: "Assistant Coach", detail: "Nicolas Ayoub" },
+  { role: "Assistant Coach", detail: "Alex Beauvais" },
+  { role: "Assistant Coach", detail: "Mark Lange" },
 ];
 
 function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map" | "menu" | "users"; size?: number }) {
@@ -366,13 +367,14 @@ function Staff() {
     <section className="data-section reveal">
       <div className="section-heading">
         <div><div className="eyebrow dark">TEAM CONTACTS</div><h2>STAFF</h2></div>
-        <p>Staff names from the previous page have been intentionally removed. Confirmed names, biographies, and direct contact details can be added here when available.</p>
+        <p>Meet the confirmed Carleton Ravens men’s lacrosse coaching staff listed by CUFLA for the 2026 season. Direct contact details can be added when available.</p>
       </div>
+      <div className="source-note"><span className="live-dot" />5 coaches · Verified against CUFLA Gamesheet · February 2026</div>
       <div className="staff-grid">
         {staff.map((person, index) => (
           <article className="staff-card" key={person.role}>
             <div className="staff-placeholder">{String(index + 1).padStart(2, "0")}</div>
-            <div><span>{person.role}</span><h3>{person.detail}</h3><p>Contact information pending confirmation.</p></div>
+            <div><span>{person.role}</span><h3>{person.detail}</h3><p>Direct contact information coming soon.</p></div>
           </article>
         ))}
       </div>
