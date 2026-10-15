@@ -304,7 +304,7 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
         <article className="feature-card">
           <span className="card-number">01</span><Icon name="users" size={28} /><h3>JOIN THE RAVENS</h3>
           <p>Interested in competing at Carleton? Request a recruitment package and learn about training camp, eligibility, and the club experience.</p>
-          <a href="mailto:carleton@cufla.ca">carleton@cufla.ca <Icon name="arrow" /></a>
+          <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com <Icon name="arrow" /></a>
         </article>
         <article className="feature-card red-card">
           <span className="card-number">02</span><Icon name="calendar" size={28} /><h3>THE SEASON</h3>
@@ -495,8 +495,8 @@ function Staff() {
         ))}
       </div>
       <div className="contact-strip">
-        <div><Icon name="mail" size={26} /><span>GENERAL RECRUITMENT CONTACT</span><strong>carleton@cufla.ca</strong></div>
-        <a href="mailto:carleton@cufla.ca">Send an email <Icon name="arrow" /></a>
+        <div><Icon name="mail" size={26} /><span>GENERAL RECRUITMENT CONTACT</span><strong>carletonlacrosse@gmail.com</strong></div>
+        <a href="mailto:carletonlacrosse@gmail.com">Send an email <Icon name="arrow" /></a>
       </div>
     </section>
   );
