@@ -163,11 +163,15 @@ const roster = [
 ];
 
 const staff = [
-  { role: "Head Coach", detail: "Colin Gallagher" },
-  { role: "Head Coach", detail: "Jacob Gasperetti" },
-  { role: "Assistant Coach", detail: "Nicolas Ayoub" },
-  { role: "Assistant Coach", detail: "Alex Beauvais" },
-  { role: "Assistant Coach", detail: "Mark Lange" },
+  { role: "Head Coach", detail: "Colin Gallagher", email: "colingallagher96@gmail.com" },
+  { role: "Head Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com" },
+  { role: "Assistant Coach", detail: "Nic Ayoub", email: "buoya24@hotmail.com" },
+  { role: "Assistant Coach", detail: "Alex Beauvais", email: "beauvaisalex@hotmail.ca" },
+  { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com" },
+  { role: "Athletic Trainer", detail: "Asheley Baldwin", email: "" },
+  { role: "Equipment Manager", detail: "Will Wingrove", email: "will@thewingroves.com" },
+  { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com" },
+  { role: "Remote Coaching Consultant", detail: "Matthew Caines", email: "matthewcaines@cmail.carleton.ca" },
 ];
 
 function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map" | "menu" | "users"; size?: number }) {
@@ -473,14 +477,20 @@ function Staff() {
     <section className="data-section reveal">
       <div className="section-heading">
         <div><div className="eyebrow dark">TEAM CONTACTS</div><h2>STAFF</h2></div>
-        <p>Meet the confirmed Carleton Ravens men’s lacrosse coaching staff listed by CUFLA for the 2026 season. Direct contact details can be added when available.</p>
+        <p>Meet the Carleton Ravens men’s lacrosse coaching, performance, and operations staff for the 2026 season.</p>
       </div>
-      <div className="source-note"><span className="live-dot" />5 coaches · Verified against CUFLA Gamesheet · February 2026</div>
+      <div className="source-note"><span className="live-dot" />9 team staff · Updated February 2026</div>
       <div className="staff-grid">
         {staff.map((person) => (
           <article className="staff-card" key={person.detail}>
             <div className="staff-placeholder"><img src="/coach-placeholder.svg" alt="" /></div>
-            <div><span>{person.role}</span><h3>{person.detail}</h3><p>Direct contact information coming soon.</p></div>
+            <div>
+              <span>{person.role}</span>
+              <h3>{person.detail}</h3>
+              {person.email
+                ? <a href={`mailto:${person.email}`}>{person.email}</a>
+                : <p>Direct contact information coming soon.</p>}
+            </div>
           </article>
         ))}
       </div>

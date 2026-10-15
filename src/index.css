@@ -168,6 +168,8 @@ button { cursor: pointer; }
 .staff-card span { color: var(--raven-red); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
 .staff-card h3 { margin: 14px 0 8px; font-size: 28px; }
 .staff-card p { margin: 0; color: #777; font-size: 13px; }
+.staff-card a { color: #61615f; font-size: 13px; text-decoration-color: var(--raven-red); text-underline-offset: 4px; overflow-wrap: anywhere; }
+.staff-card a:hover { color: var(--raven-red); }
 .contact-strip { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding: 30px 40px; color: var(--white); background: var(--raven-red); }
 .contact-strip > div { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2px 16px; }
 .contact-strip > div svg { grid-row: 1 / 3; }
