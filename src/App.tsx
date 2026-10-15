@@ -248,10 +248,6 @@ export default function App() {
         </div>
       </main>
 
-      <footer>
-        <div><Wordmark /><p>1125 Colonel By Drive, Ottawa, ON, K1S 5B6</p></div>
-        <div className="footer-mark">GO RAVENS.</div>
-      </footer>
     </div>
   );
 }
