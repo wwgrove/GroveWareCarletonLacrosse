@@ -230,7 +230,32 @@ export default function App() {
 
         <section className="team-nav-wrap" id="team-content">
           <div className="team-title"><span>Club Sport</span><strong>Ravens Men’s Lacrosse</strong></div>
-          <div className="team-tabs" role="tablist" aria-label="Team information">
+          <div
+            className="team-tabs"
+            role="tablist"
+            aria-label="Team information"
+            style={{ touchAction: "pan-y" }}
+            onTouchStart={(event) => {
+              event.currentTarget.dataset.touchStartX = String(event.touches[0].clientX);
+            }}
+            onTouchEnd={(event) => {
+              const startX = Number(event.currentTarget.dataset.touchStartX);
+              const distance = event.changedTouches[0].clientX - startX;
+              if (!Number.isFinite(startX) || Math.abs(distance) < 50) return;
+              const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
+              const nextIndex = Math.min(
+                tabs.length - 1,
+                Math.max(0, currentIndex + (distance < 0 ? 1 : -1)),
+              );
+              const tabList = event.currentTarget;
+              setActiveTab(tabs[nextIndex].id);
+              window.requestAnimationFrame(() => {
+                tabList
+                  .querySelector('[aria-selected="true"]')
+                  ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+              });
+            }}
+          >
             {tabs.map((tab) => (
               <button key={tab.id} className={activeTab === tab.id ? "active" : ""} type="button" role="tab" aria-selected={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>
                 {tab.label}
