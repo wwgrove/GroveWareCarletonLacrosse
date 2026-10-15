@@ -5,8 +5,8 @@
 }
 
 :root {
-  --raven-red: #e31837;
-  --raven-red-dark: #b30e27;
+  --raven-red: #e91c24;
+  --raven-red-dark: #e91c24;
   --ink: #0a0a0b;
   --charcoal: #171719;
   --paper: #f4f3f0;
@@ -95,7 +95,7 @@ button { cursor: pointer; }
 
 .section-heading { display: grid; grid-template-columns: 1fr .9fr; align-items: end; gap: 60px; margin-bottom: 60px; }
 .source-note { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: #666; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
-.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--raven-red); box-shadow: 0 0 0 4px rgba(227,24,55,.14); }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--raven-red); box-shadow: 0 0 0 4px rgba(233,28,36,.14); }
 .live-dot:not(.is-fallback) { animation: live-pulse 1.8s ease-out infinite; }
 .live-dot.is-fallback { background: #777; box-shadow: 0 0 0 4px rgba(119,119,119,.14); }
 .roster-table { overflow: hidden; border-top: 5px solid var(--raven-red); background: var(--white); box-shadow: 0 18px 50px rgba(0,0,0,.07); }
@@ -191,7 +191,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
 @keyframes hero-enter { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
 @keyframes line-enter { to { transform: scaleY(1); } }
 @keyframes panel-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes live-pulse { 0% { box-shadow: 0 0 0 0 rgba(227,24,55,.35); } 70%, 100% { box-shadow: 0 0 0 8px rgba(227,24,55,0); } }
+@keyframes live-pulse { 0% { box-shadow: 0 0 0 0 rgba(233,28,36,.35); } 70%, 100% { box-shadow: 0 0 0 8px rgba(233,28,36,0); } }
 
 @media (max-width: 900px) {
   .utility-links, .season-mark { display: none; }
