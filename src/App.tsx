@@ -20,6 +20,47 @@ type GamesheetGame = {
   home: { id: number; title: string; goals: number; result: string };
 };
 
+type PlayerStat = {
+  number: string;
+  name: string;
+  gp: number;
+  goals: number;
+  assists: number;
+  points: number;
+  pim: number;
+};
+
+type GoalieStat = {
+  number: string;
+  name: string;
+  gp: number;
+  wins: number;
+  losses: number;
+  shotsAgainst: number;
+  goalsAgainst: number;
+  goalsAgainstAverage: number;
+  savePercentage: number;
+};
+
+type TeamStandings = {
+  record: string;
+  points: number;
+  rank: number;
+  division: string;
+  gamesPlayed: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  penaltyMinutes: number;
+  powerPlayGoals: number;
+};
+
+type GamesheetTeamData = {
+  roster: { number: string; name: string }[];
+  playerStats: PlayerStat[];
+  goalie: GoalieStat;
+  standings: TeamStandings;
+};
+
 type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
 
 const CARLETON_TEAM_ID = 550883;
@@ -34,16 +75,7 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "staff", label: "Staff" },
 ];
 
-const teamStats = [
-  { label: "Games played", value: "7", abbreviation: "GP" },
-  { label: "Goals for", value: "38", abbreviation: "GF" },
-  { label: "Goals against", value: "113", abbreviation: "GA" },
-  { label: "Goal differential", value: "−75", abbreviation: "DIFF" },
-  { label: "League points", value: "0", abbreviation: "PTS" },
-  { label: "Penalty minutes", value: "41.5", abbreviation: "PIM" },
-];
-
-const playerStats = [
+const playerStats: PlayerStat[] = [
   { number: "9", name: "Jenson White", gp: 6, goals: 14, assists: 1, points: 15, pim: 0 },
   { number: "66", name: "Cooper Delorey", gp: 7, goals: 6, assists: 6, points: 12, pim: 0.5 },
   { number: "21", name: "Griffin Armstrong", gp: 7, goals: 5, assists: 5, points: 10, pim: 2 },
@@ -175,6 +207,125 @@ const staff = [
   { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com" },
   { role: "Remote Coaching Consultant", detail: "Matthew Caines", email: "matthewcaines@cmail.carleton.ca" },
 ];
+
+function parseGamesheetTeamData(html: string): GamesheetTeamData {
+  const normalized = html.replaceAll("\\\"", "\"");
+  const playerPattern = /"firstName":"([^"]+)".*?"jersey":"([^"]+)".*?"lastName":"([^"]+)".*?"stats":\{([^{}]+)\}/gs;
+  const knownNames = new Map(roster.map((player) => [
+    `${player.number}-${player.name.toLocaleUpperCase()}`,
+    player.name,
+  ]));
+  const seenPlayers = new Set<string>();
+  const parsedRoster: { number: string; name: string }[] = [];
+  const parsedPlayerStats: PlayerStat[] = [];
+  let parsedGoalie: GoalieStat | null = null;
+  let match: RegExpExecArray | null;
+
+  function formatName(firstName: string, lastName: string, number: string) {
+    const sourceName = `${firstName} ${lastName}`;
+    const knownName = knownNames.get(`${number}-${sourceName.toLocaleUpperCase()}`);
+    if (knownName) return knownName;
+    return sourceName
+      .toLocaleLowerCase()
+      .replace(/(^|[\s’'-])\p{L}/gu, (letter) => letter.toLocaleUpperCase());
+  }
+
+  while ((match = playerPattern.exec(normalized)) !== null) {
+    const [, firstName, number, lastName, rawStats] = match;
+    const playerKey = `${number}-${firstName}-${lastName}`;
+    if (seenPlayers.has(playerKey)) continue;
+    seenPlayers.add(playerKey);
+
+    const stats = JSON.parse(`{${rawStats}}`) as Record<string, number | boolean>;
+    const name = formatName(firstName, lastName, number);
+    parsedRoster.push({ number, name });
+
+    if (Number.isFinite(stats.gaa)) {
+      parsedGoalie = {
+        number,
+        name,
+        gp: Number(stats.gp),
+        wins: Number(stats.wins),
+        losses: Number(stats.losses),
+        shotsAgainst: Number(stats.sa),
+        goalsAgainst: Number(stats.ga),
+        goalsAgainstAverage: Number(stats.gaa),
+        savePercentage: Number(stats.svpct),
+      };
+    } else {
+      parsedPlayerStats.push({
+        number,
+        name,
+        gp: Number(stats.gp),
+        goals: Number(stats.g),
+        assists: Number(stats.a),
+        points: Number(stats.pts),
+        pim: Number(stats.pim),
+      });
+    }
+  }
+
+  const standingsMatch = normalized.match(
+    /"teamStandings":\{"record":"([^"]+)","pts":([0-9.]+),"rank":([0-9.]+),"division":"([^"]+)","stats":\{([^{}]+)\}/s,
+  );
+  if (parsedRoster.length < 20 || parsedPlayerStats.length < 20 || !parsedGoalie || !standingsMatch) {
+    throw new Error("Gamesheet team payload was incomplete");
+  }
+
+  const standingsStats = JSON.parse(`{${standingsMatch[5]}}`) as Record<string, number | string>;
+  parsedRoster.sort((first, second) =>
+    Number(first.number) - Number(second.number) || first.name.localeCompare(second.name),
+  );
+
+  return {
+    roster: parsedRoster,
+    playerStats: parsedPlayerStats,
+    goalie: parsedGoalie,
+    standings: {
+      record: standingsMatch[1],
+      points: Number(standingsMatch[2]),
+      rank: Number(standingsMatch[3]),
+      division: standingsMatch[4],
+      gamesPlayed: Number(standingsStats.GP),
+      goalsFor: Number(standingsStats.GF),
+      goalsAgainst: Number(standingsStats.GA),
+      penaltyMinutes: Number(standingsStats.PIM),
+      powerPlayGoals: Number(standingsStats.PPG),
+    },
+  };
+}
+
+function useLiveGamesheetTeamData() {
+  const [data, setData] = useState<GamesheetTeamData | null>(null);
+  const [feedStatus, setFeedStatus] = useState<"loading" | "live" | "fallback">("loading");
+
+  useEffect(() => {
+    let active = true;
+
+    async function refreshTeamData() {
+      try {
+        const response = await fetch(GAMESHEET_TEAM_SOURCE, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Gamesheet returned ${response.status}`);
+        const nextData = parseGamesheetTeamData(await response.text());
+        if (active) {
+          setData(nextData);
+          setFeedStatus("live");
+        }
+      } catch {
+        if (active) setFeedStatus("fallback");
+      }
+    }
+
+    refreshTeamData();
+    const refreshTimer = window.setInterval(refreshTeamData, 5 * 60 * 1000);
+    return () => {
+      active = false;
+      window.clearInterval(refreshTimer);
+    };
+  }, []);
+
+  return { data, feedStatus };
+}
 
 function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map" | "menu" | "users"; size?: number }) {
   const paths = {
@@ -324,16 +475,26 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
 }
 
 function Roster() {
+  const { data, feedStatus } = useLiveGamesheetTeamData();
+  const rosterPlayers = data?.roster ?? roster;
+
   return (
     <section className="data-section reveal">
       <div className="section-heading">
         <div><div className="eyebrow dark">2025–26 TEAM</div><h2>ROSTER</h2></div>
         <p>Complete player listing from the CUFLA 2026 Gamesheet roster.</p>
       </div>
-      <div className="source-note"><span className="live-dot" />27 athletes · Verified against CUFLA Gamesheet · September 2026</div>
+      <div className="source-note">
+        <span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} />
+        {feedStatus === "live"
+          ? `${rosterPlayers.length} athletes · Live Gamesheet feed · Refreshes every five minutes`
+          : feedStatus === "loading"
+            ? `${rosterPlayers.length} athletes · Refreshing Gamesheet`
+            : `${rosterPlayers.length} athletes · Verified fallback · September 2026`}
+      </div>
       <div className="roster-table" role="table" aria-label="Carleton Ravens men's lacrosse roster">
         <div className="table-row table-head" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span></div>
-        {roster.map((player) => (
+        {rosterPlayers.map((player) => (
           <div className="table-row" role="row" key={`${player.number}-${player.name}`}>
             <span role="cell" className="jersey-number">{player.number}</span>
             <span role="cell" className="player-name"><span className="avatar">{player.name.split(" ").map((part) => part[0]).join("")}</span>{player.name}</span>
@@ -346,10 +507,48 @@ function Roster() {
 }
 
 function Stats() {
+  const { data, feedStatus } = useLiveGamesheetTeamData();
   const [playerSort, setPlayerSort] = useState<{ key: PlayerStatSortKey; direction: "asc" | "desc" }>({
     key: "points",
     direction: "desc",
   });
+  const currentPlayerStats = data?.playerStats ?? playerStats;
+  const standings = data?.standings ?? {
+    record: "0-7-0-0",
+    points: 0,
+    rank: 6,
+    division: "East",
+    gamesPlayed: 7,
+    goalsFor: 38,
+    goalsAgainst: 113,
+    penaltyMinutes: 41.5,
+    powerPlayGoals: 1,
+  };
+  const goalie = data?.goalie ?? {
+    number: "33",
+    name: "Liam Clark",
+    gp: 7,
+    wins: 0,
+    losses: 7,
+    shotsAgainst: 120,
+    goalsAgainst: 113,
+    goalsAgainstAverage: 12.107142857142858,
+    savePercentage: 0.058333333333333334,
+  };
+  const recordParts = standings.record.split("-");
+  const displayRecord = `${recordParts[0] ?? "0"} –${recordParts[1] ?? "0"}`;
+  const ordinalSuffix = standings.rank % 100 >= 11 && standings.rank % 100 <= 13
+    ? "TH"
+    : standings.rank % 10 === 1 ? "ST" : standings.rank % 10 === 2 ? "ND" : standings.rank % 10 === 3 ? "RD" : "TH";
+  const gamesPlayed = Math.max(standings.gamesPlayed, 1);
+  const currentTeamStats = [
+    { label: "Games played", value: String(standings.gamesPlayed), abbreviation: "GP" },
+    { label: "Goals for", value: String(standings.goalsFor), abbreviation: "GF" },
+    { label: "Goals against", value: String(standings.goalsAgainst), abbreviation: "GA" },
+    { label: "Goal differential", value: String(standings.goalsFor - standings.goalsAgainst).replace("-", "−"), abbreviation: "DIFF" },
+    { label: "League points", value: String(standings.points), abbreviation: "PTS" },
+    { label: "Penalty minutes", value: String(standings.penaltyMinutes), abbreviation: "PIM" },
+  ];
   const statColumns: { key: PlayerStatSortKey; label: string }[] = [
     { key: "number", label: "#" },
     { key: "name", label: "Player" },
@@ -359,7 +558,7 @@ function Stats() {
     { key: "points", label: "PTS" },
     { key: "pim", label: "PIM" },
   ];
-  const sortedPlayerStats = [...playerStats].sort((first, second) => {
+  const sortedPlayerStats = [...currentPlayerStats].sort((first, second) => {
     const firstValue = playerSort.key === "number" ? Number(first.number) : first[playerSort.key];
     const secondValue = playerSort.key === "number" ? Number(second.number) : second[playerSort.key];
     const comparison = typeof firstValue === "string"
@@ -381,25 +580,25 @@ function Stats() {
     <section className="data-section reveal">
       <div className="section-heading stats-heading">
         <div><div className="eyebrow dark">CUFLA 2026</div><h2>TEAM STATS</h2></div>
-        <p>Current Carleton team statistics taken from the supplied Gamesheet team source. Figures reflect the seven games currently recorded.</p>
+        <p>Current Carleton team statistics taken from the supplied Gamesheet team source. Figures reflect the {standings.gamesPlayed} games currently recorded.</p>
       </div>
 
       <div className="stats-scoreboard">
         <div className="record-block">
           <span>Current record</span>
-          <strong>0 –7</strong>
-          <small>6TH · EAST DIVISION</small>
+          <strong>{displayRecord}</strong>
+          <small>{standings.rank}{ordinalSuffix} · {standings.division.toLocaleUpperCase()} DIVISION</small>
         </div>
         <div className="headline-stats">
-          <div><span>Goals / game</span><strong>5.43</strong><small>GPG</small></div>
-          <div><span>Against / game</span><strong>16.14</strong><small>GAPG</small></div>
-          <div><span>Power play goals / game</span><strong>0.14</strong><small>PP GPG</small></div>
-          <div><span>Penalty minutes / game</span><strong>5.9</strong><small>PIM PG</small></div>
+          <div><span>Goals / game</span><strong>{(standings.goalsFor / gamesPlayed).toFixed(2)}</strong><small>GPG</small></div>
+          <div><span>Against / game</span><strong>{(standings.goalsAgainst / gamesPlayed).toFixed(2)}</strong><small>GAPG</small></div>
+          <div><span>Power play goals / game</span><strong>{(standings.powerPlayGoals / gamesPlayed).toFixed(2)}</strong><small>PP GPG</small></div>
+          <div><span>Penalty minutes / game</span><strong>{(standings.penaltyMinutes / gamesPlayed).toFixed(1)}</strong><small>PIM PG</small></div>
         </div>
       </div>
 
       <div className="stats-grid">
-        {teamStats.map((stat) => (
+        {currentTeamStats.map((stat) => (
           <article className="stat-card" key={stat.abbreviation}>
             <span>{stat.abbreviation}</span>
             <strong>{stat.value}</strong>
@@ -448,15 +647,15 @@ function Stats() {
           <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">GP</span><span role="columnheader">W–L</span><span role="columnheader">SA</span><span role="columnheader">SV</span><span role="columnheader">GAA</span><span role="columnheader">SV%</span>
         </div>
         <div className="player-stat-row goalie-stat-row goalie-player-row" role="row">
-          <span role="cell" className="jersey-number">33</span>
-          <span role="cell" className="player-name">Liam Clark</span>
-          <span role="cell">7</span><span role="cell">0–7</span><span role="cell">120</span><span role="cell">7</span><span role="cell">12.11</span><span role="cell">.058</span>
+          <span role="cell" className="jersey-number">{goalie.number}</span>
+          <span role="cell" className="player-name">{goalie.name}</span>
+          <span role="cell">{goalie.gp}</span><span role="cell">{goalie.wins}–{goalie.losses}</span><span role="cell">{goalie.shotsAgainst}</span><span role="cell">{goalie.shotsAgainst - goalie.goalsAgainst}</span><span role="cell">{goalie.goalsAgainstAverage.toFixed(2)}</span><span role="cell">{goalie.savePercentage.toFixed(3).replace(/^0/, "")}</span>
         </div>
       </div>
 
       <div className="stats-source">
-        <div><span className="live-dot" /><strong>GAMESHEET DATA</strong></div>
-        <p>Verified from the supplied CUFLA 2026 Carleton team page · September 2026</p>
+        <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET DATA" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
+        <p>{feedStatus === "live" ? "Roster and statistics refresh every five minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
       </div>
     </section>
   );
