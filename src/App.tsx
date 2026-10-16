@@ -328,7 +328,7 @@ function Roster() {
     <section className="data-section reveal">
       <div className="section-heading">
         <div><div className="eyebrow dark">2025–26 TEAM</div><h2>ROSTER</h2></div>
-        <p>Complete player listing from the CUFLA 2026 Gamesheet roster. Unpublished biographical fields remain intentionally blank.</p>
+        <p>Complete player listing from the CUFLA 2026 Gamesheet roster.</p>
       </div>
       <div className="source-note"><span className="live-dot" />27 athletes · Verified against CUFLA Gamesheet · September 2026</div>
       <div className="roster-table" role="table" aria-label="Carleton Ravens men's lacrosse roster">
