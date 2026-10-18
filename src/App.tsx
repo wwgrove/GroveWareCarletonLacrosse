@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 
-type Tab = "overview" | "roster" | "stats" | "schedule" | "staff";
+type Tab = "overview" | "roster" | "stats" | "schedule" | "staff" | "recruiting";
 type ScheduleGame = {
   date: string;
   opponent: string;
@@ -66,6 +66,7 @@ type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "point
 const CARLETON_TEAM_ID = 550883;
 const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
 const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8WDbKlutIdyMSLz6zFRy-IxdLkyIGcH18_F7eAyH1vW8sVnTeu05sHdpnCmf1kwjYBw/exec";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -73,6 +74,7 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "stats", label: "Stats" },
   { id: "schedule", label: "Schedule" },
   { id: "staff", label: "Staff" },
+  { id: "recruiting", label: "Recruiting" },
 ];
 
 const playerStats: PlayerStat[] = [
@@ -427,6 +429,7 @@ export default function App() {
           {activeTab === "stats" && <Stats />}
           {activeTab === "schedule" && <Schedule />}
           {activeTab === "staff" && <Staff />}
+          {activeTab === "recruiting" && <Recruiting />}
         </div>
       </main>
 
@@ -745,6 +748,145 @@ function Staff() {
       <div className="contact-strip">
         <div><Icon name="mail" size={26} /><span>GENERAL RECRUITMENT CONTACT</span><strong>carletonlacrosse@gmail.com</strong></div>
         <a href="mailto:carletonlacrosse@gmail.com">Send an email <Icon name="arrow" /></a>
+      </div>
+    </section>
+  );
+}
+
+function Recruiting() {
+  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  async function submitRecruitingForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formBody = new URLSearchParams();
+    new FormData(form).forEach((value, key) => formBody.append(key, String(value)));
+    setFormStatus("submitting");
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: formBody,
+      });
+      form.reset();
+      setFormStatus("success");
+    } catch (error) {
+      console.error(error);
+      setFormStatus("error");
+    }
+  }
+
+  return (
+    <section className="data-section recruiting-section reveal">
+      <div className="section-heading recruiting-heading">
+        <div><div className="eyebrow dark">BECOME A RAVEN</div><h2>RECRUITING</h2></div>
+        <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
+      </div>
+
+      <div className="recruiting-layout">
+        <aside className="recruiting-intro">
+          <span>CARLETON MEN’S LACROSSE</span>
+          <h3>YOUR NEXT<br />CHAPTER STARTS<br />IN OTTAWA.</h3>
+          <p>Complete the questionnaire and a member of the Ravens program will follow up with next steps.</p>
+          <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com</a>
+        </aside>
+
+        <form className="recruiting-form" id="recruitingForm" onSubmit={submitRecruitingForm}>
+          <div className="form-section-heading">
+            <span>01</span>
+            <div><strong>Personal information</strong><small>How we can reach you</small></div>
+          </div>
+          <div className="form-grid">
+            <label className="form-field">
+              <span>First Name <b>*</b></span>
+              <input type="text" name="firstName" autoComplete="given-name" required />
+            </label>
+            <label className="form-field">
+              <span>Last Name <b>*</b></span>
+              <input type="text" name="lastName" autoComplete="family-name" required />
+            </label>
+            <label className="form-field">
+              <span>Email Address <b>*</b></span>
+              <input type="email" name="email" autoComplete="email" required />
+            </label>
+            <label className="form-field">
+              <span>Phone Number <b>*</b></span>
+              <input type="tel" name="phone" autoComplete="tel" required />
+            </label>
+            <label className="form-field">
+              <span>Home Town <b>*</b></span>
+              <input type="text" name="hometown" autoComplete="address-level2" required />
+            </label>
+            <label className="form-field">
+              <span>Intended Area of Study <b>*</b></span>
+              <input type="text" name="areaOfStudy" required />
+            </label>
+          </div>
+
+          <div className="form-section-heading">
+            <span>02</span>
+            <div><strong>Player profile</strong><small>Your lacrosse information</small></div>
+          </div>
+          <div className="form-grid">
+            <label className="form-field">
+              <span>Position(s) <b>*</b></span>
+              <input type="text" name="positions" required />
+            </label>
+            <label className="form-field">
+              <span>Dominant Hand <b>*</b></span>
+              <select name="dominantHand" defaultValue="" required>
+                <option value="" disabled>Select...</option>
+                <option value="Right">Right</option>
+                <option value="Left">Left</option>
+                <option value="Both">Both</option>
+              </select>
+            </label>
+            <label className="form-field">
+              <span>Height <b>*</b></span>
+              <input type="text" name="height" placeholder="e.g. 6′ 1″" required />
+            </label>
+            <label className="form-field">
+              <span>Weight (lbs) <b>*</b></span>
+              <input type="number" name="weight" min="1" required />
+            </label>
+          </div>
+
+          <div className="form-section-heading">
+            <span>03</span>
+            <div><strong>Links and message</strong><small>Optional supporting information</small></div>
+          </div>
+          <div className="form-grid">
+            <label className="form-field form-field-full">
+              <span>Link to Highlights</span>
+              <input type="url" name="highlights" placeholder="https://" />
+            </label>
+            <label className="form-field form-field-full">
+              <span>Instagram</span>
+              <input type="text" name="instagram" placeholder="@username" />
+            </label>
+            <label className="form-field form-field-full">
+              <span>Message to Coaching Staff</span>
+              <textarea name="coachMessage" rows={5} />
+            </label>
+          </div>
+
+          <div className="form-submit-row">
+            <button type="submit" id="submitBtn" disabled={formStatus === "submitting"}>
+              {formStatus === "submitting" ? "Submitting..." : "Submit Information"}
+              <Icon name="arrow" />
+            </button>
+            <div
+              className={`form-message ${formStatus === "success" ? "is-success" : formStatus === "error" ? "is-error" : ""}`}
+              id="formMessage"
+              role="status"
+              aria-live="polite"
+            >
+              {formStatus === "success" && "Success! Check your spreadsheet and email."}
+              {formStatus === "error" && "Error submitting form. Please try again."}
+            </div>
+          </div>
+        </form>
       </div>
     </section>
   );
