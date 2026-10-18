@@ -381,6 +381,15 @@ export default function App() {
           <img className="hero-image" src="/ravens-lacrosse-hero.jpg" alt="A Carleton Ravens lacrosse player carrying the ball past an Ottawa defender" />
           <div className="hero-overlay" />
           <div className="hero-line" />
+          <a
+            className="hero-social-link"
+            href="https://www.instagram.com/carletonlax/"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Visit Carleton Lacrosse on Instagram"
+          >
+            <img src="/instagram.svg" alt="" />
+          </a>
           <div className="hero-content reveal is-visible">
             <div className="eyebrow">CARLETON RAVENS · MEN’S CLUB SPORT</div>
             <h1>MENS LACROSSE</h1>
