@@ -778,11 +778,11 @@ function Recruiting() {
           <div className="form-grid">
             <label className="form-field">
               <span>First Name <b>*</b></span>
-              <input type="text" name="firstName" autoComplete="given-name" placeholder="John" required />
+              <input type="text" name="firstName" autoComplete="given-name" placeholder="e.g. John" required />
             </label>
             <label className="form-field">
               <span>Last Name <b>*</b></span>
-              <input type="text" name="lastName" autoComplete="family-name" placeholder="Doe" required />
+              <input type="text" name="lastName" autoComplete="family-name" placeholder="e.g. Doe" required />
             </label>
             <label className="form-field">
               <span>Email Address <b>*</b></span>
