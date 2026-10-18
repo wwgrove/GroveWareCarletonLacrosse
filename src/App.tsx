@@ -784,59 +784,45 @@ function Recruiting() {
         <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
       </div>
 
-      <div className="recruiting-layout">
-        <aside className="recruiting-intro">
-          <span>CARLETON MEN’S LACROSSE</span>
-          <h3>YOUR NEXT<br />CHAPTER STARTS<br />IN OTTAWA.</h3>
-          <p>Complete the questionnaire and a member of the Ravens program will follow up with next steps.</p>
-          <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com</a>
-        </aside>
-
-        <form className="recruiting-form" id="recruitingForm" onSubmit={submitRecruitingForm}>
-          <div className="form-section-heading">
-            <span>01</span>
-            <div><strong>Personal information</strong><small>How we can reach you</small></div>
-          </div>
+      <form className="recruiting-form" id="recruitingForm" onSubmit={submitRecruitingForm}>
+        <div className="recruiting-form-banner">
+          <strong>PROSPECT INFORMATION</strong>
+          <span>CUFLA · EAST DIVISION</span>
+        </div>
+        <div className="recruiting-form-content">
           <div className="form-grid">
             <label className="form-field">
               <span>First Name <b>*</b></span>
-              <input type="text" name="firstName" autoComplete="given-name" required />
+              <input type="text" name="firstName" autoComplete="given-name" placeholder="e.g. Jenson" required />
             </label>
             <label className="form-field">
               <span>Last Name <b>*</b></span>
-              <input type="text" name="lastName" autoComplete="family-name" required />
+              <input type="text" name="lastName" autoComplete="family-name" placeholder="e.g. White" required />
             </label>
             <label className="form-field">
               <span>Email Address <b>*</b></span>
-              <input type="email" name="email" autoComplete="email" required />
+              <input type="email" name="email" autoComplete="email" placeholder="athlete@email.com" required />
             </label>
             <label className="form-field">
               <span>Phone Number <b>*</b></span>
-              <input type="tel" name="phone" autoComplete="tel" required />
+              <input type="tel" name="phone" autoComplete="tel" placeholder="(613) 555-0199" required />
             </label>
             <label className="form-field">
               <span>Home Town <b>*</b></span>
-              <input type="text" name="hometown" autoComplete="address-level2" required />
+              <input type="text" name="hometown" autoComplete="address-level2" placeholder="e.g. Ottawa, ON" required />
             </label>
             <label className="form-field">
               <span>Intended Area of Study <b>*</b></span>
-              <input type="text" name="areaOfStudy" required />
+              <input type="text" name="areaOfStudy" placeholder="e.g. Commerce, Engineering" required />
             </label>
-          </div>
-
-          <div className="form-section-heading">
-            <span>02</span>
-            <div><strong>Player profile</strong><small>Your lacrosse information</small></div>
-          </div>
-          <div className="form-grid">
             <label className="form-field">
               <span>Position(s) <b>*</b></span>
-              <input type="text" name="positions" required />
+              <input type="text" name="positions" placeholder="e.g. Attack, Midfield, LSM" required />
             </label>
             <label className="form-field">
               <span>Dominant Hand <b>*</b></span>
               <select name="dominantHand" defaultValue="" required>
-                <option value="" disabled>Select...</option>
+                <option value="" disabled>Select Hand...</option>
                 <option value="Right">Right</option>
                 <option value="Left">Left</option>
                 <option value="Both">Both</option>
@@ -844,36 +830,29 @@ function Recruiting() {
             </label>
             <label className="form-field">
               <span>Height <b>*</b></span>
-              <input type="text" name="height" placeholder="e.g. 6′ 1″" required />
+              <input type="text" name="height" placeholder={'e.g. 6′2"'} required />
             </label>
             <label className="form-field">
               <span>Weight (lbs) <b>*</b></span>
-              <input type="number" name="weight" min="1" required />
+              <input type="number" name="weight" min="1" placeholder="e.g. 195" required />
             </label>
-          </div>
-
-          <div className="form-section-heading">
-            <span>03</span>
-            <div><strong>Links and message</strong><small>Optional supporting information</small></div>
-          </div>
-          <div className="form-grid">
-            <label className="form-field form-field-full">
-              <span>Link to Highlights</span>
-              <input type="url" name="highlights" placeholder="https://" />
+            <label className="form-field">
+              <span>Link to Highlights <em>(Optional)</em></span>
+              <input type="url" name="highlights" placeholder="https://youtube.com/... or Hudl link" />
             </label>
-            <label className="form-field form-field-full">
-              <span>Instagram</span>
+            <label className="form-field">
+              <span>Instagram <em>(Optional)</em></span>
               <input type="text" name="instagram" placeholder="@username" />
             </label>
             <label className="form-field form-field-full">
-              <span>Message to Coaching Staff</span>
-              <textarea name="coachMessage" rows={5} />
+              <span>Message to Coaching Staff <em>(Optional)</em></span>
+              <textarea name="coachMessage" rows={5} placeholder="Share your club/high school team history, academic goals, or any questions for the coaching staff..." />
             </label>
           </div>
 
           <div className="form-submit-row">
             <button type="submit" id="submitBtn" disabled={formStatus === "submitting"}>
-              {formStatus === "submitting" ? "Submitting..." : "Submit Information"}
+              {formStatus === "submitting" ? "Submitting..." : "Submit Player Profile"}
               <Icon name="arrow" />
             </button>
             <div
@@ -882,12 +861,12 @@ function Recruiting() {
               role="status"
               aria-live="polite"
             >
-              {formStatus === "success" && "Success! Check your spreadsheet and email."}
+              {formStatus === "success" && "✓ Profile logged. Check your email for confirmation."}
               {formStatus === "error" && "Error submitting form. Please try again."}
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </section>
   );
 }
