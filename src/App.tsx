@@ -204,10 +204,11 @@ const staff = [
   { role: "Assistant Coach", detail: "Nic Ayoub", email: "buoya24@hotmail.com" },
   { role: "Assistant Coach", detail: "Alex Beauvais", email: "beauvaisalex@hotmail.ca" },
   { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com" },
-  { role: "Athletic Trainer", detail: "Asheley Baldwin", email: "" },
+  { role: "Athletic Trainer", detail: "Ashley Baldwin", email: "ashleybaldwin10@hotmail.com" },
   { role: "Equipment Manager", detail: "Will Wingrove", email: "will@thewingroves.com" },
   { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com" },
-  { role: "Remote Coaching Consultant", detail: "Matthew Caines", email: "matthewcaines@cmail.carleton.ca" },
+  { role: "Remote Coaching Consultant", detail: "Matt Caines", email: "mcaines99@hotmail.com" },
+  { role: "Video Coach", detail: "Tyler Rohleder", email: "tylerjrohleder17@gmail.com" },
 ];
 
 function parseGamesheetTeamData(html: string): GamesheetTeamData {
@@ -705,7 +706,7 @@ function Staff() {
         <div><div className="eyebrow dark">TEAM CONTACTS</div><h2>STAFF</h2></div>
         <p>Meet the Carleton Ravens men’s lacrosse coaching, performance, and operations staff for the 2026 season.</p>
       </div>
-      <div className="source-note"><span className="live-dot" />9 team staff · Updated September 2026</div>
+      <div className="source-note"><span className="live-dot" />10 team staff · Updated September 2026</div>
       <div className="staff-grid">
         {staff.map((person) => (
           <article className="staff-card" key={person.detail}>
