@@ -66,7 +66,7 @@ type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "point
 const CARLETON_TEAM_ID = 550883;
 const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
 const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8WDbKlutIdyMSLz6zFRy-IxdLkyIGcH18_F7eAyH1vW8sVnTeu05sHdpnCmf1kwjYBw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkLzJHuM4OU-16HLgmXprAr9HCaw4KKE8v1rBrfJ0txsQG-hOG1btAFKGtaH1S1TpSHQ/exec";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
