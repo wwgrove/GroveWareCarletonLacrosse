@@ -514,7 +514,7 @@ function Stats() {
     savePercentage: 0.058333333333333334,
   };
   const recordParts = standings.record.split("-");
-  const displayRecord = `${recordParts[0] ?? "0"} –${recordParts[1] ?? "0"}`;
+  const displayRecord = `${recordParts[0] ?? "0"}–${recordParts[1] ?? "0"}`;
   const ordinalSuffix = standings.rank % 100 >= 11 && standings.rank % 100 <= 13
     ? "TH"
     : standings.rank % 10 === 1 ? "ST" : standings.rank % 10 === 2 ? "ND" : standings.rank % 10 === 3 ? "RD" : "TH";
