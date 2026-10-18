@@ -208,7 +208,7 @@ const staff = [
   { role: "Equipment Manager", detail: "Will Wingrove", email: "will@thewingroves.com" },
   { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com" },
   { role: "Remote Coaching Consultant", detail: "Matt Caines", email: "mcaines99@hotmail.com" },
-  { role: "Video Coach", detail: "Tyler Rohleder", email: "tylerjrohleder17@gmail.com" },
+  { role: "Director of Stats, Analytics, and Video", detail: "Tyler Rohleder", email: "tylerjrohleder17@gmail.com" },
 ];
 
 function parseGamesheetTeamData(html: string): GamesheetTeamData {
