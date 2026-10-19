@@ -521,7 +521,7 @@ export default function App() {
             <img src="/instagram.svg" alt="" />
           </a>
           <div className="hero-content reveal is-visible">
-            <div className="eyebrow">CARLETON RAVENS · MEN’S CLUB SPORT</div>
+            <div className="eyebrow">CARLETON RAVENS · CLUB SPORT</div>
             <h1>MENS LACROSSE</h1>
           </div>
           <div className="season-mark"><strong>CUFLA</strong><span>EAST DIVISION</span></div>
