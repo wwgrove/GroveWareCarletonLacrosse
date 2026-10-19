@@ -524,7 +524,7 @@ export default function App() {
             <div className="eyebrow">
               <span className="hero-eyebrow-copy">
                 <span>CARLETON RAVENS<span className="hero-eyebrow-desktop"> · CLUB SPORT</span></span>
-                <span className="hero-eyebrow-mobile">MENS CLUB SPORT</span>
+                <span className="hero-eyebrow-mobile">CLUB SPORT</span>
               </span>
             </div>
             <h1>MENS LACROSSE</h1>
