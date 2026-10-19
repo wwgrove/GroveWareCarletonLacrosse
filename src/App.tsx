@@ -73,6 +73,7 @@ const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
 const PROSPECT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform";
+const STAFF_PHOTO_BASE_URL = "https://raw.githubusercontent.com/wwgrove/CarletonLacrosseWebpage/f0b31f57f91bb798ed63871575e02e7504447f2e/Coaches-Head-Shots";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -205,16 +206,16 @@ const roster = [
 ];
 
 const staff = [
-  { role: "Head Coach", detail: "Colin Gallagher", email: "colingallagher96@gmail.com" },
-  { role: "Head Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com" },
-  { role: "Assistant Coach", detail: "Nic Ayoub", email: "buoya24@hotmail.com" },
-  { role: "Assistant Coach", detail: "Alex Beauvais", email: "beauvaisalex@hotmail.ca" },
-  { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com" },
-  { role: "Athletic Trainer", detail: "Ashley Baldwin", email: "ashleybaldwin10@hotmail.com" },
-  { role: "Equipment Manager", detail: "Will Wingrove", email: "will@thewingroves.com" },
-  { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com" },
-  { role: "Remote Coaching Consultant", detail: "Matt Caines", email: "mcaines99@hotmail.com" },
-  { role: "Director of Stats, Analytics, and Video", detail: "Tyler Rohleder", email: "tylerjrohleder17@gmail.com" },
+  { role: "Head Coach", detail: "Colin Gallagher", email: "colingallagher96@gmail.com", photo: "Colin-Gallagher.jpg" },
+  { role: "Head Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com", photo: "Jacob-Gasperetti.jpg" },
+  { role: "Assistant Coach", detail: "Nic Ayoub", email: "buoya24@hotmail.com", photo: "Nic-Ayoub.jpg" },
+  { role: "Assistant Coach", detail: "Alex Beauvais", email: "beauvaisalex@hotmail.ca", photo: "Alex-Beauvais.jpg" },
+  { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com", photo: "Mark-Lange.jpg" },
+  { role: "Athletic Trainer", detail: "Ashley Baldwin", email: "ashleybaldwin10@hotmail.com", photo: "Ashley-Baldwin.jpg" },
+  { role: "Equipment Manager", detail: "Will Wingrove", email: "will@thewingroves.com", photo: "Will-Wingrove.jpg" },
+  { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com", photo: "Brock-Conely.jpg" },
+  { role: "Remote Coaching Consultant", detail: "Matt Caines", email: "mcaines99@hotmail.com", photo: "Matt-Caines.jpg" },
+  { role: "Director of Stats, Analytics, and Video", detail: "Tyler Rohleder", email: "tylerjrohleder17@gmail.com", photo: "Tyler-Rohleder.jpg" },
 ];
 
 function parseGamesheetTeamData(html: string): GamesheetTeamData {
@@ -857,7 +858,9 @@ function Staff() {
       <div className="staff-grid">
         {staff.map((person) => (
           <article className="staff-card" key={person.detail}>
-            <div className="staff-placeholder"><img src="/coach-placeholder.svg" alt="" /></div>
+            <div className="staff-placeholder">
+              <img src={`${STAFF_PHOTO_BASE_URL}/${person.photo}`} alt={`${person.detail}, ${person.role}`} loading="lazy" />
+            </div>
             <div>
               <span>{person.role}</span>
               <h3>{person.detail}</h3>

@@ -176,7 +176,7 @@ button { cursor: pointer; }
 .staff-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
 .staff-card { display: grid; grid-template-columns: 130px 1fr; min-height: 200px; align-items: stretch; background: var(--white); }
 .staff-placeholder { overflow: hidden; background: var(--white); }
-.staff-placeholder img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.staff-placeholder img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .staff-card > div:last-child { padding: 36px; }
 .staff-card span { color: var(--raven-red); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
 .staff-card h3 { margin: 14px 0 8px; font-size: 28px; }
