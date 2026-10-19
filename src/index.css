@@ -262,7 +262,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .hero { min-height: 620px; }
   .team-nav-wrap { position: relative; flex-direction: column; }
   .team-title { min-width: auto; clip-path: none; }
-  .team-tabs { overflow-x: auto; padding-right: 0; touch-action: pan-x pan-y; overscroll-behavior-inline: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .team-tabs { width: 100%; max-width: 100%; align-self: stretch; margin-left: 0; overflow-x: auto; padding-right: 0; touch-action: pan-x pan-y; overscroll-behavior-inline: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .team-tabs::-webkit-scrollbar { display: none; }
   .team-tabs button { width: auto; min-width: max-content; height: 62px; flex: 0 0 auto; padding: 0 22px; white-space: nowrap; }
   .intro-section, .section-heading { grid-template-columns: 1fr; }
