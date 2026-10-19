@@ -521,7 +521,12 @@ export default function App() {
             <img src="/instagram.svg" alt="" />
           </a>
           <div className="hero-content reveal is-visible">
-            <div className="eyebrow">CARLETON RAVENS · CLUB SPORT</div>
+            <div className="eyebrow">
+              <span className="hero-eyebrow-copy">
+                <span>CARLETON RAVENS<span className="hero-eyebrow-desktop"> · CLUB SPORT</span></span>
+                <span className="hero-eyebrow-mobile">MENS CLUB SPORT</span>
+              </span>
+            </div>
             <h1>MENS LACROSSE</h1>
           </div>
           <div className="season-mark"><strong>CUFLA</strong><span>EAST DIVISION</span></div>

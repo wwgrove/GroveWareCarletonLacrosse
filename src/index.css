@@ -51,6 +51,7 @@ button { cursor: pointer; }
 .hero-content { position: relative; z-index: 2; width: 100%; max-width: none; margin: 0; padding: 0 clamp(24px,6vw,90px) 72px; text-align: left; }
 .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: #dedede; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .22em; }
 .eyebrow::before { width: 36px; height: 2px; content: ""; background: var(--raven-red); }
+.hero-eyebrow-mobile { display: none; }
 .eyebrow.dark { color: #666; }
 .hero h1, .intro-section h2, .section-heading h2, .empty-state h3 { margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 900; line-height: .82; letter-spacing: -.035em; }
 .hero h1 { max-width: 720px; font-size: clamp(76px, 11vw, 164px); }
@@ -258,6 +259,9 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .hero-social-link { top: 24px; width: 42px; height: 42px; }
   .hero-content { padding-bottom: 52px; }
   .hero h1 { max-width: 100%; font-size: clamp(50px,15vw,64px); line-height: .9; }
+  .hero-eyebrow-copy { display: flex; flex-direction: column; gap: 5px; }
+  .hero-eyebrow-desktop { display: none; }
+  .hero-eyebrow-mobile { display: block; }
   .intro-section, .data-section { padding-top: 72px; padding-bottom: 72px; }
   .stat-band div { min-height: 135px; }
   .table-row { grid-template-columns: 72px 1fr; column-gap: 14px; padding: 0 20px; }
