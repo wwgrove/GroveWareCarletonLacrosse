@@ -72,6 +72,7 @@ const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
+const RECRUITMENT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform?embedded=true";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -876,6 +877,7 @@ function Staff() {
 
 function Recruiting() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [isRecruitmentDayOpen, setIsRecruitmentDayOpen] = useState(true);
   const [hasSubmitted, setHasSubmitted] = useState(() => {
     try {
       return localStorage.getItem(RECRUITING_SUBMITTED_KEY) === "true";
@@ -883,6 +885,17 @@ function Recruiting() {
       return false;
     }
   });
+
+  useEffect(() => {
+    if (!isRecruitmentDayOpen) return;
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsRecruitmentDayOpen(false);
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isRecruitmentDayOpen]);
 
   async function submitRecruitingForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -913,27 +926,33 @@ function Recruiting() {
   }
 
   return (
-    <section className="data-section recruiting-section reveal">
-      <div className="section-heading recruiting-heading">
-        <div><div className="eyebrow dark">BECOME A RAVEN</div><h2>RECRUITING</h2></div>
-        <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
-      </div>
-
-      {hasSubmitted ? (
-        <div className="recruiting-form recruiting-complete">
-          <div className="recruiting-form-banner">
-            <strong>PROSPECT INFORMATION</strong>
-            <span>CUFLA · EAST DIVISION</span>
-          </div>
-          <div className="recruiting-complete-content">
-            <span aria-hidden="true">✓</span>
-            <h3>PROFILE ALREADY SUBMITTED</h3>
-            <p>Your recruiting information has been received from this browser. Contact the team if you need to correct or update your submission.</p>
-            <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com</a>
+    <>
+      <section className="data-section recruiting-section reveal">
+        <div className="section-heading recruiting-heading">
+          <div><div className="eyebrow dark">BECOME A RAVEN</div><h2>RECRUITING</h2></div>
+          <div className="recruiting-heading-copy">
+            <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
+            <button className="recruitment-day-button" type="button" onClick={() => setIsRecruitmentDayOpen(true)}>
+              Register for Recruitment Day <Icon name="arrow" />
+            </button>
           </div>
         </div>
-      ) : (
-      <form className="recruiting-form" id="recruitingForm" onSubmit={submitRecruitingForm}>
+
+        {hasSubmitted ? (
+          <div className="recruiting-form recruiting-complete">
+            <div className="recruiting-form-banner">
+              <strong>PROSPECT INFORMATION</strong>
+              <span>CUFLA · EAST DIVISION</span>
+            </div>
+            <div className="recruiting-complete-content">
+              <span aria-hidden="true">✓</span>
+              <h3>PROFILE ALREADY SUBMITTED</h3>
+              <p>Your recruiting information has been received from this browser. Contact the team if you need to correct or update your submission.</p>
+              <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com</a>
+            </div>
+          </div>
+        ) : (
+        <form className="recruiting-form" id="recruitingForm" onSubmit={submitRecruitingForm}>
         <div className="recruiting-form-banner">
           <strong>PROSPECT INFORMATION</strong>
           <span>CUFLA · EAST DIVISION</span>
@@ -1015,8 +1034,38 @@ function Recruiting() {
             </div>
           </div>
         </div>
-      </form>
+        </form>
+        )}
+      </section>
+
+      {isRecruitmentDayOpen && (
+        <div className="recruitment-day-overlay" onMouseDown={() => setIsRecruitmentDayOpen(false)}>
+          <div
+            className="recruitment-day-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="recruitment-day-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="recruitment-day-modal-header">
+              <div>
+                <span>CARLETON RAVENS LACROSSE</span>
+                <strong id="recruitment-day-title">Recruitment Day Registration</strong>
+              </div>
+              <button type="button" onClick={() => setIsRecruitmentDayOpen(false)} autoFocus>
+                Close form <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <iframe
+              src={RECRUITMENT_DAY_FORM_URL}
+              title="Carleton Ravens Lacrosse Recruitment Day registration form"
+              loading="eager"
+            >
+              Loading Recruitment Day registration form…
+            </iframe>
+          </div>
+        </div>
       )}
-    </section>
+    </>
   );
 }
