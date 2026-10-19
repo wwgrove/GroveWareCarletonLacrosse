@@ -72,7 +72,7 @@ const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
-const PROSPECT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform?embedded=true";
+const PROSPECT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -879,6 +879,7 @@ function Staff() {
 function Recruiting() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [isProspectDayOpen, setIsProspectDayOpen] = useState(true);
+  const [usesMobileFormLink, setUsesMobileFormLink] = useState(() => window.matchMedia("(max-width: 600px)").matches);
   const [hasSubmitted, setHasSubmitted] = useState(() => {
     try {
       return localStorage.getItem(RECRUITING_SUBMITTED_KEY) === "true";
@@ -897,6 +898,13 @@ function Recruiting() {
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [isProspectDayOpen]);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 600px)");
+    const updateFormDisplay = () => setUsesMobileFormLink(mobileQuery.matches);
+    mobileQuery.addEventListener("change", updateFormDisplay);
+    return () => mobileQuery.removeEventListener("change", updateFormDisplay);
+  }, []);
 
   async function submitRecruitingForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1058,13 +1066,25 @@ function Recruiting() {
                 <span className="prospect-day-close-icon"><Icon name="close" size={18} /></span>
               </button>
             </div>
-            <iframe
-              src={PROSPECT_DAY_FORM_URL}
-              title="Carleton Ravens Lacrosse Prospect Day registration form"
-              loading="eager"
-            >
-              Loading Prospect Day registration form…
-            </iframe>
+            {usesMobileFormLink ? (
+              <div className="prospect-day-mobile-handoff">
+                <span>PROSPECT DAY REGISTRATION</span>
+                <strong>Continue securely to Google Forms</strong>
+                <p>On mobile, the form opens directly to avoid third-party cookie and sign-in issues inside an embedded window.</p>
+                <a href={PROSPECT_DAY_FORM_URL} target="_blank" rel="noreferrer">
+                  Open Prospect Day Form <Icon name="arrow" />
+                </a>
+                <small>The form will open in a new browser tab.</small>
+              </div>
+            ) : (
+              <iframe
+                src={`${PROSPECT_DAY_FORM_URL}?embedded=true`}
+                title="Carleton Ravens Lacrosse Prospect Day registration form"
+                loading="eager"
+              >
+                Loading Prospect Day registration form…
+              </iframe>
+            )}
           </div>
         </div>
       )}
