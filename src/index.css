@@ -67,8 +67,8 @@ button { cursor: pointer; }
 .team-title { display: flex; min-width: 32%; flex-direction: column; justify-content: center; padding: 16px clamp(24px, 5vw, 80px); background: var(--raven-red); clip-path: polygon(0 0,94% 0,100% 100%,0 100%); }
 .team-title span { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
 .team-title strong { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 22px; text-transform: uppercase; }
-.team-tabs { display: flex; padding-right: clamp(16px, 4vw, 64px); }
-.team-tabs button { position: relative; min-width: 110px; border: 0; color: #aaa; background: transparent; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; transition: color 180ms ease; }
+.team-tabs { display: flex; flex: 1; padding-right: clamp(16px, 4vw, 64px); }
+.team-tabs button { position: relative; min-width: 0; flex: 1 1 0; border: 0; color: #aaa; background: transparent; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; transition: color 180ms ease; }
 .team-tabs button::after { position: absolute; right: 18px; bottom: 0; left: 18px; height: 4px; content: ""; background: var(--raven-red); transform: scaleX(0); transition: transform 220ms ease; }
 .team-tabs button:hover, .team-tabs button.active { color: var(--white); }
 .team-tabs button.active::after { transform: scaleX(1); }
