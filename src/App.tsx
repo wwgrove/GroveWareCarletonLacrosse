@@ -72,7 +72,6 @@ const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
-const PROSPECT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform";
 const STAFF_PHOTO_BASE_URL = "https://raw.githubusercontent.com/wwgrove/CarletonLacrosseWebpage/f0b31f57f91bb798ed63871575e02e7504447f2e/Coaches-Head-Shots";
 
 const tabs: { id: Tab; label: string }[] = [
@@ -337,11 +336,10 @@ function useLiveGamesheetTeamData() {
   return { data, feedStatus };
 }
 
-function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "close" | "mail" | "map" | "menu" | "users"; size?: number }) {
+function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map" | "menu" | "users"; size?: number }) {
   const paths = {
     arrow: <path d="M5 12h14m-5-5 5 5-5 5" />,
     calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></>,
-    close: <path d="m6 6 12 12M18 6 6 18" />,
     mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
     map: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
     menu: <path d="M4 7h16M4 12h16M4 17h16" />,
@@ -881,8 +879,6 @@ function Staff() {
 
 function Recruiting() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [isProspectDayOpen, setIsProspectDayOpen] = useState(true);
-  const [usesMobileFormLink, setUsesMobileFormLink] = useState(() => window.matchMedia("(max-width: 600px)").matches);
   const [hasSubmitted, setHasSubmitted] = useState(() => {
     try {
       return localStorage.getItem(RECRUITING_SUBMITTED_KEY) === "true";
@@ -890,24 +886,6 @@ function Recruiting() {
       return false;
     }
   });
-
-  useEffect(() => {
-    if (!isProspectDayOpen) return;
-
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsProspectDayOpen(false);
-    }
-
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [isProspectDayOpen]);
-
-  useEffect(() => {
-    const mobileQuery = window.matchMedia("(max-width: 600px)");
-    const updateFormDisplay = () => setUsesMobileFormLink(mobileQuery.matches);
-    mobileQuery.addEventListener("change", updateFormDisplay);
-    return () => mobileQuery.removeEventListener("change", updateFormDisplay);
-  }, []);
 
   async function submitRecruitingForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -938,15 +916,11 @@ function Recruiting() {
   }
 
   return (
-    <>
-      <section className="data-section recruiting-section reveal">
+    <section className="data-section recruiting-section reveal">
         <div className="section-heading recruiting-heading">
           <div><div className="eyebrow dark">BECOME A RAVEN</div><h2>RECRUITING</h2></div>
           <div className="recruiting-heading-copy">
             <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
-            <button className="prospect-day-button" type="button" onClick={() => setIsProspectDayOpen(true)}>
-              Register for Prospect Day <Icon name="arrow" />
-            </button>
           </div>
         </div>
 
@@ -1048,54 +1022,6 @@ function Recruiting() {
         </div>
         </form>
         )}
-      </section>
-
-      {isProspectDayOpen && (
-        <div className="prospect-day-overlay" onMouseDown={() => setIsProspectDayOpen(false)}>
-          <div
-            className="prospect-day-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="prospect-day-title"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <div className="prospect-day-modal-header">
-              <div>
-                <span>CARLETON RAVENS LACROSSE</span>
-                <strong className="prospect-day-desktop-title" id="prospect-day-title">Prospect Day Registration</strong>
-              </div>
-              <button className="prospect-day-close" type="button" onClick={() => setIsProspectDayOpen(false)} autoFocus>
-                <span className="prospect-day-close-label">Back to recruiting</span>
-                <span className="prospect-day-close-icon"><Icon name="close" size={18} /></span>
-              </button>
-            </div>
-            {usesMobileFormLink ? (
-              <div className="prospect-day-mobile-handoff">
-                <span>PROSPECT DAY REGISTRATION</span>
-                <div className="prospect-day-mobile-title">
-                  <img
-                    src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Google_Forms_2020_Logo.svg/1920px-Google_Forms_2020_Logo.svg.png"
-                    alt=""
-                  />
-                  <strong>Continue securely to Google Forms</strong>
-                </div>
-                <a href={PROSPECT_DAY_FORM_URL} target="_blank" rel="noreferrer">
-                  Open Prospect Day Form <Icon name="arrow" />
-                </a>
-                <small>The form will open in a new browser tab.</small>
-              </div>
-            ) : (
-              <iframe
-                src={`${PROSPECT_DAY_FORM_URL}?embedded=true`}
-                title="Carleton Ravens Lacrosse Prospect Day registration form"
-                loading="eager"
-              >
-                Loading Prospect Day registration form…
-              </iframe>
-            )}
-          </div>
-        </div>
-      )}
-    </>
+    </section>
   );
 }
