@@ -560,7 +560,7 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
         <div className="intro-copy">
           <p className="lead">Carleton Ravens Lacrosse competes in the Canadian University Field Lacrosse Association, bringing together high-level competition, academic ambition, and a proud club tradition.</p>
           <p>The program was formed in 1986 for the first Ontario University Field Lacrosse Association spring tournament. Today, the Ravens compete in CUFLA’s East Division and pursue a place at the Baggataway Cup championship.</p>
-          <button className="text-button" type="button" onClick={() => onSelect("roster")}>View the 2025–26 roster <Icon name="arrow" /></button>
+          <button className="text-button" type="button" onClick={() => onSelect("roster")}>View the 2026–27 roster <Icon name="arrow" /></button>
         </div>
       </section>
 
@@ -599,7 +599,7 @@ function Roster() {
   return (
     <section className="data-section reveal">
       <div className="section-heading">
-        <div><div className="eyebrow dark">2025–26 TEAM</div><h2>ROSTER</h2></div>
+        <div><div className="eyebrow dark">2026–27 TEAM</div><h2>ROSTER</h2></div>
         <p>Complete player listing from the CUFLA 2026 Gamesheet roster.</p>
       </div>
       <div className="source-note">
