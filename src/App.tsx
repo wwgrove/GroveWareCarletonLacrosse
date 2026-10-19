@@ -71,6 +71,7 @@ const HERO_IMAGES_API_URL = "https://api.github.com/repos/wwgrove/CarletonLacros
 const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
+const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -875,9 +876,17 @@ function Staff() {
 
 function Recruiting() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [hasSubmitted, setHasSubmitted] = useState(() => {
+    try {
+      return localStorage.getItem(RECRUITING_SUBMITTED_KEY) === "true";
+    } catch {
+      return false;
+    }
+  });
 
   async function submitRecruitingForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (hasSubmitted) return;
     const form = event.currentTarget;
     const formBody = new URLSearchParams();
     new FormData(form).forEach((value, key) => formBody.append(key, String(value)));
@@ -890,6 +899,12 @@ function Recruiting() {
         body: formBody,
       });
       form.reset();
+      try {
+        localStorage.setItem(RECRUITING_SUBMITTED_KEY, "true");
+      } catch {
+        // The completed state still remains locked for the current page session.
+      }
+      setHasSubmitted(true);
       setFormStatus("success");
     } catch (error) {
       console.error(error);
@@ -904,6 +919,20 @@ function Recruiting() {
         <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
       </div>
 
+      {hasSubmitted ? (
+        <div className="recruiting-form recruiting-complete">
+          <div className="recruiting-form-banner">
+            <strong>PROSPECT INFORMATION</strong>
+            <span>CUFLA · EAST DIVISION</span>
+          </div>
+          <div className="recruiting-complete-content">
+            <span aria-hidden="true">✓</span>
+            <h3>PROFILE ALREADY SUBMITTED</h3>
+            <p>Your recruiting information has been received from this browser. Contact the team if you need to correct or update your submission.</p>
+            <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com</a>
+          </div>
+        </div>
+      ) : (
       <form className="recruiting-form" id="recruitingForm" onSubmit={submitRecruitingForm}>
         <div className="recruiting-form-banner">
           <strong>PROSPECT INFORMATION</strong>
@@ -987,6 +1016,7 @@ function Recruiting() {
           </div>
         </div>
       </form>
+      )}
     </section>
   );
 }

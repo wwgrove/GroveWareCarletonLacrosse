@@ -218,6 +218,11 @@ button { cursor: pointer; }
 .form-message { min-height: 20px; font-size: 13px; font-weight: 700; line-height: 1.5; }
 .form-message.is-success { color: #246b45; }
 .form-message.is-error { color: var(--raven-red); }
+.recruiting-complete-content { display: flex; min-height: 420px; flex-direction: column; align-items: center; justify-content: center; padding: 60px; text-align: center; }
+.recruiting-complete-content > span { display: grid; width: 64px; height: 64px; place-items: center; border-radius: 50%; color: var(--white); background: var(--raven-red); font-size: 30px; font-weight: 800; }
+.recruiting-complete-content h3 { margin: 28px 0 14px; font-size: clamp(28px,4vw,48px); font-weight: 900; letter-spacing: -.035em; }
+.recruiting-complete-content p { max-width: 600px; margin: 0; color: #686764; line-height: 1.7; }
+.recruiting-complete-content a { margin-top: 26px; padding-bottom: 7px; border-bottom: 2px solid var(--raven-red); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; }
 
 footer { display: flex; min-height: 240px; align-items: center; justify-content: space-between; padding: 50px clamp(24px,6vw,90px); color: var(--white); background: var(--ink); }
 footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
@@ -283,6 +288,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .form-field-full { grid-column: auto; }
   .form-submit-row { grid-template-columns: 1fr; gap: 14px; }
   .form-submit-row button { width: 100%; }
+  .recruiting-complete-content { min-height: 360px; padding: 44px 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
