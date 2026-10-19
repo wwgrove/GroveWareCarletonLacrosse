@@ -1070,7 +1070,6 @@ function Recruiting() {
               <div className="prospect-day-mobile-handoff">
                 <span>PROSPECT DAY REGISTRATION</span>
                 <strong>Continue securely to Google Forms</strong>
-                <p>On mobile, the form opens directly to avoid third-party cookie and sign-in issues inside an embedded window.</p>
                 <a href={PROSPECT_DAY_FORM_URL} target="_blank" rel="noreferrer">
                   Open Prospect Day Form <Icon name="arrow" />
                 </a>
