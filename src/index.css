@@ -289,7 +289,8 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .intro-section, .data-section { padding-top: 72px; padding-bottom: 72px; }
   .stat-band div { min-height: 135px; }
   .table-row { grid-template-columns: 72px 1fr; column-gap: 14px; padding: 0 20px; }
-  .staff-card { grid-template-columns: 90px 1fr; }
+  .staff-card { grid-template-columns: 90px 1fr; align-items: center; }
+  .staff-placeholder { width: 90px; aspect-ratio: 1; align-self: center; }
   .staff-card > div:last-child { padding: 28px 22px; }
   .contact-strip, footer { align-items: flex-start; flex-direction: column; gap: 32px; }
   .stats-grid, .headline-stats { grid-template-columns: 1fr; }
