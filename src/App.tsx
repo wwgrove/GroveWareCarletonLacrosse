@@ -336,10 +336,11 @@ function useLiveGamesheetTeamData() {
   return { data, feedStatus };
 }
 
-function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map" | "menu" | "users"; size?: number }) {
+function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "close" | "mail" | "map" | "menu" | "users"; size?: number }) {
   const paths = {
     arrow: <path d="M5 12h14m-5-5 5 5-5 5" />,
     calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></>,
+    close: <path d="m6 6 12 12M18 6 6 18" />,
     mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
     map: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
     menu: <path d="M4 7h16M4 12h16M4 17h16" />,
@@ -1052,8 +1053,9 @@ function Recruiting() {
                 <span>CARLETON RAVENS LACROSSE</span>
                 <strong id="prospect-day-title">Prospect Day Registration</strong>
               </div>
-              <button type="button" onClick={() => setIsProspectDayOpen(false)} autoFocus>
-                Close form <span aria-hidden="true">×</span>
+              <button className="prospect-day-close" type="button" onClick={() => setIsProspectDayOpen(false)} autoFocus>
+                <span className="prospect-day-close-label">Back to recruiting</span>
+                <span className="prospect-day-close-icon"><Icon name="close" size={18} /></span>
               </button>
             </div>
             <iframe
