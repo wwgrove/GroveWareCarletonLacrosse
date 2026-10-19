@@ -38,8 +38,10 @@ button { cursor: pointer; }
 .menu-button { display: none; border: 0; color: var(--white); background: transparent; }
 
 .hero { position: relative; display: flex; min-height: 690px; align-items: flex-end; overflow: hidden; color: var(--white); background: var(--ink); }
-.hero-image, .hero-overlay, .hero-line { position: absolute; inset: 0; }
-.hero-image { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: saturate(.72) contrast(1.08); animation: hero-enter 1.4s cubic-bezier(.2,.8,.2,1) both; }
+.hero-carousel, .hero-overlay, .hero-line { position: absolute; inset: 0; }
+.hero-carousel { overflow: hidden; background: var(--ink) url("/ravens-lacrosse-hero.jpg") center 40% / cover no-repeat; animation: hero-enter 1.4s cubic-bezier(.2,.8,.2,1) both; }
+.hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; opacity: 0; filter: saturate(.72) contrast(1.08); transform: scale(1.015); transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; will-change: opacity, transform; }
+.hero-image.is-active { z-index: 1; opacity: 1; transform: scale(1); }
 .hero-overlay { background: linear-gradient(90deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.62) 40%,rgba(0,0,0,.1) 78%), linear-gradient(0deg,rgba(0,0,0,.76) 0%,transparent 52%); }
 .hero-line { right: auto; width: 7px; background: var(--raven-red); transform: scaleY(0); transform-origin: bottom; animation: line-enter .8s .3s ease-out forwards; }
 .hero-social-link { position: absolute; z-index: 3; top: 48px; left: clamp(24px,6vw,90px); display: grid; width: 48px; height: 48px; place-items: center; transition: transform 180ms ease, filter 180ms ease; }

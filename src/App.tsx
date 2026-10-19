@@ -67,6 +67,10 @@ const CARLETON_TEAM_ID = 550883;
 const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
 const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
+const HERO_IMAGES_API_URL = "https://api.github.com/repos/wwgrove/CarletonLacrosseWebpage/contents/hero-carosel-photos";
+const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
+const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
+const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -352,6 +356,132 @@ function Wordmark() {
   );
 }
 
+function HeroCarousel() {
+  const [images, setImages] = useState<string[]>([HERO_FALLBACK_IMAGE]);
+  const [activeImage, setActiveImage] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    const now = new Date();
+    const periodStamp = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+      now.getHours() < 12 ? "AM" : "PM",
+    ].join("-");
+
+    function readCachedImages() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(HERO_CACHE_KEY) ?? "[]");
+        return Array.isArray(parsed)
+          ? parsed.filter((value): value is string => typeof value === "string" && value.length > 0)
+          : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveHeroCache(nextImages: string[]) {
+      try {
+        localStorage.setItem(HERO_CACHE_KEY, JSON.stringify(nextImages));
+        localStorage.setItem(HERO_PERIOD_KEY, periodStamp);
+      } catch {
+        // The carousel still works when storage is blocked or full.
+      }
+    }
+
+    function shuffleImages(sourceImages: string[]) {
+      const shuffled = [...sourceImages];
+      for (let index = shuffled.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+      }
+      return shuffled;
+    }
+
+    async function loadHeroImages() {
+      const cachedImages = readCachedImages();
+      let cachedPeriod = "";
+      try {
+        cachedPeriod = localStorage.getItem(HERO_PERIOD_KEY) ?? "";
+      } catch {
+        // Continue with the network request when local storage is unavailable.
+      }
+
+      if (cachedPeriod === periodStamp && cachedImages.length > 0) {
+        if (active) setImages(cachedImages);
+        return;
+      }
+
+      try {
+        const response = await fetch(HERO_IMAGES_API_URL, {
+          headers: {
+            Accept: "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+        });
+        if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
+        const contents = await response.json() as Array<{
+          name?: string;
+          type?: string;
+          download_url?: string | null;
+        }>;
+        const imageUrls = contents
+          .filter((item) =>
+            item.type === "file"
+            && typeof item.download_url === "string"
+            && /\.(jpe?g|png|webp|gif|avif)$/i.test(item.name ?? ""),
+          )
+          .map((item) => item.download_url as string);
+        if (imageUrls.length === 0) throw new Error("The GitHub hero folder contained no supported images");
+
+        const shuffledImages = shuffleImages(imageUrls);
+        saveHeroCache(shuffledImages);
+        if (active) setImages(shuffledImages);
+      } catch (error) {
+        console.error("Unable to refresh hero carousel images", error);
+        const fallbackImages = cachedImages.length > 0 ? cachedImages : [HERO_FALLBACK_IMAGE];
+        saveHeroCache(fallbackImages);
+        if (active) setImages(fallbackImages);
+      }
+    }
+
+    loadHeroImages();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    setActiveImage(0);
+    if (images.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const slideTimer = window.setInterval(() => {
+      setActiveImage((current) => (current + 1) % images.length);
+    }, 6000);
+    return () => window.clearInterval(slideTimer);
+  }, [images]);
+
+  useEffect(() => {
+    if (images.length < 2) return;
+    const nextImage = new Image();
+    nextImage.src = images[(activeImage + 1) % images.length];
+  }, [activeImage, images]);
+
+  return (
+    <div className="hero-carousel" role="img" aria-label="Carleton Ravens lacrosse action photography">
+      {images.map((source, index) => (
+        <img
+          className={`hero-image ${index === activeImage ? "is-active" : ""}`}
+          src={source}
+          alt=""
+          aria-hidden="true"
+          key={source}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -378,7 +508,7 @@ export default function App() {
 
       <main>
         <section className="hero">
-          <img className="hero-image" src="/ravens-lacrosse-hero.jpg" alt="A Carleton Ravens lacrosse player carrying the ball past an Ottawa defender" />
+          <HeroCarousel />
           <div className="hero-overlay" />
           <div className="hero-line" />
           <a
