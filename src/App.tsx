@@ -1059,6 +1059,7 @@ function Recruiting() {
             <div className="prospect-day-modal-header">
               <div>
                 <span>CARLETON RAVENS LACROSSE</span>
+                <strong className="prospect-day-desktop-title" id="prospect-day-title">Prospect Day Registration</strong>
               </div>
               <button className="prospect-day-close" type="button" onClick={() => setIsProspectDayOpen(false)} autoFocus>
                 <span className="prospect-day-close-label">Back to recruiting</span>
@@ -1068,7 +1069,13 @@ function Recruiting() {
             {usesMobileFormLink ? (
               <div className="prospect-day-mobile-handoff">
                 <span>PROSPECT DAY REGISTRATION</span>
-                <strong>Continue securely to Google Forms</strong>
+                <div className="prospect-day-mobile-title">
+                  <img
+                    src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Google_Forms_2020_Logo.svg/1920px-Google_Forms_2020_Logo.svg.png"
+                    alt=""
+                  />
+                  <strong>Continue securely to Google Forms</strong>
+                </div>
                 <a href={PROSPECT_DAY_FORM_URL} target="_blank" rel="noreferrer">
                   Open Prospect Day Form <Icon name="arrow" />
                 </a>
