@@ -1059,7 +1059,6 @@ function Recruiting() {
             <div className="prospect-day-modal-header">
               <div>
                 <span>CARLETON RAVENS LACROSSE</span>
-                <strong id="prospect-day-title">Prospect Day Registration</strong>
               </div>
               <button className="prospect-day-close" type="button" onClick={() => setIsProspectDayOpen(false)} autoFocus>
                 <span className="prospect-day-close-label">Back to recruiting</span>
