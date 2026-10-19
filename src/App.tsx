@@ -528,7 +528,7 @@ export default function App() {
         </section>
 
         <section className="team-nav-wrap" id="team-content">
-          <div className="team-title"><span>Club Sport</span><strong>Ravens Men’s Lacrosse</strong></div>
+          <div className="team-title"></div>
           <div className="team-tabs" role="tablist" aria-label="Team information">
             {tabs.map((tab) => (
               <button key={tab.id} className={activeTab === tab.id ? "active" : ""} type="button" role="tab" aria-selected={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>
