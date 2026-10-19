@@ -72,7 +72,7 @@ const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
-const RECRUITMENT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform?embedded=true";
+const PROSPECT_DAY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8KfGYrjAQ_GmRM3jCCooEhmnKBXZhBMPs8kRMjJc8N-v16Q/viewform?embedded=true";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -877,7 +877,7 @@ function Staff() {
 
 function Recruiting() {
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [isRecruitmentDayOpen, setIsRecruitmentDayOpen] = useState(true);
+  const [isProspectDayOpen, setIsProspectDayOpen] = useState(true);
   const [hasSubmitted, setHasSubmitted] = useState(() => {
     try {
       return localStorage.getItem(RECRUITING_SUBMITTED_KEY) === "true";
@@ -887,15 +887,15 @@ function Recruiting() {
   });
 
   useEffect(() => {
-    if (!isRecruitmentDayOpen) return;
+    if (!isProspectDayOpen) return;
 
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsRecruitmentDayOpen(false);
+      if (event.key === "Escape") setIsProspectDayOpen(false);
     }
 
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [isRecruitmentDayOpen]);
+  }, [isProspectDayOpen]);
 
   async function submitRecruitingForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -932,8 +932,8 @@ function Recruiting() {
           <div><div className="eyebrow dark">BECOME A RAVEN</div><h2>RECRUITING</h2></div>
           <div className="recruiting-heading-copy">
             <p>Tell our coaching staff about your academic goals and lacrosse experience. Required fields are marked with an asterisk.</p>
-            <button className="recruitment-day-button" type="button" onClick={() => setIsRecruitmentDayOpen(true)}>
-              Register for Recruitment Day <Icon name="arrow" />
+            <button className="prospect-day-button" type="button" onClick={() => setIsProspectDayOpen(true)}>
+              Register for Prospect Day <Icon name="arrow" />
             </button>
           </div>
         </div>
@@ -1038,30 +1038,30 @@ function Recruiting() {
         )}
       </section>
 
-      {isRecruitmentDayOpen && (
-        <div className="recruitment-day-overlay" onMouseDown={() => setIsRecruitmentDayOpen(false)}>
+      {isProspectDayOpen && (
+        <div className="prospect-day-overlay" onMouseDown={() => setIsProspectDayOpen(false)}>
           <div
-            className="recruitment-day-modal"
+            className="prospect-day-modal"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="recruitment-day-title"
+            aria-labelledby="prospect-day-title"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <div className="recruitment-day-modal-header">
+            <div className="prospect-day-modal-header">
               <div>
                 <span>CARLETON RAVENS LACROSSE</span>
-                <strong id="recruitment-day-title">Recruitment Day Registration</strong>
+                <strong id="prospect-day-title">Prospect Day Registration</strong>
               </div>
-              <button type="button" onClick={() => setIsRecruitmentDayOpen(false)} autoFocus>
+              <button type="button" onClick={() => setIsProspectDayOpen(false)} autoFocus>
                 Close form <span aria-hidden="true">×</span>
               </button>
             </div>
             <iframe
-              src={RECRUITMENT_DAY_FORM_URL}
-              title="Carleton Ravens Lacrosse Recruitment Day registration form"
+              src={PROSPECT_DAY_FORM_URL}
+              title="Carleton Ravens Lacrosse Prospect Day registration form"
               loading="eager"
             >
-              Loading Recruitment Day registration form…
+              Loading Prospect Day registration form…
             </iframe>
           </div>
         </div>
