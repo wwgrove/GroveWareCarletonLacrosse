@@ -1,71 +1,9 @@
 import { type FormEvent, useEffect, useState } from "react";
+import { type GamesheetTeamData, type ScheduleGame, roster } from "./gamesheet.ts";
 
 type Tab = "overview" | "roster" | "stats" | "schedule" | "staff" | "recruiting";
-type ScheduleGame = {
-  date: string;
-  opponent: string;
-  venue: string;
-  game: string;
-  home: boolean;
-  result: string;
-};
-
-type GamesheetGame = {
-  number: string;
-  date: string;
-  time: string;
-  status: string;
-  location: string;
-  visitor: { id: number; title: string; goals: number; result: string };
-  home: { id: number; title: string; goals: number; result: string };
-};
-
-type PlayerStat = {
-  number: string;
-  name: string;
-  gp: number;
-  goals: number;
-  assists: number;
-  points: number;
-  pim: number;
-};
-
-type GoalieStat = {
-  number: string;
-  name: string;
-  gp: number;
-  wins: number;
-  losses: number;
-  shotsAgainst: number;
-  goalsAgainst: number;
-  goalsAgainstAverage: number;
-  savePercentage: number;
-};
-
-type TeamStandings = {
-  record: string;
-  points: number;
-  rank: number;
-  division: string;
-  gamesPlayed: number;
-  goalsFor: number;
-  goalsAgainst: number;
-  penaltyMinutes: number;
-  powerPlayGoals: number;
-};
-
-type GamesheetTeamData = {
-  roster: { number: string; name: string }[];
-  playerStats: PlayerStat[];
-  goalie: GoalieStat;
-  standings: TeamStandings;
-};
-
 type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
 
-const CARLETON_TEAM_ID = 550883;
-const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
-const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=carletonlacrosse%40gmail.com&ctz=America%2FNew_York";
 const DONATIONS_URL = "https://futurefunder.carleton.ca/giving-fund/mens-lacrosse-competitive-club-giving/";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
@@ -128,85 +66,6 @@ const scheduleFallback: ScheduleGame[] = [
   { date: "Oct 24, 2026", opponent: "Bishop’s", venue: "Raven’s Road Field", game: "57", home: true, result: "2:00 PM" },
 ];
 
-function extractGamesheetGames(html: string): GamesheetGame[] {
-  const marker = "[{\\\"gameId\\\"";
-  const start = html.indexOf(marker);
-  if (start === -1) throw new Error("Gamesheet schedule payload was not found");
-
-  const source = html.slice(start).replaceAll("\\\"", "\"");
-  let depth = 0;
-  let inString = false;
-  let escaped = false;
-
-  for (let index = 0; index < source.length; index += 1) {
-    const character = source[index];
-    if (inString) {
-      if (escaped) escaped = false;
-      else if (character === "\\") escaped = true;
-      else if (character === "\"") inString = false;
-      continue;
-    }
-    if (character === "\"") inString = true;
-    else if (character === "[") depth += 1;
-    else if (character === "]") {
-      depth -= 1;
-      if (depth === 0) return JSON.parse(source.slice(0, index + 1)) as GamesheetGame[];
-    }
-  }
-
-  throw new Error("Gamesheet schedule payload was incomplete");
-}
-
-function normalizeSchedule(games: GamesheetGame[]): ScheduleGame[] {
-  return games.map((game) => {
-    const home = game.home.id === CARLETON_TEAM_ID;
-    const ravens = home ? game.home : game.visitor;
-    const opponent = home ? game.visitor : game.home;
-    const result = game.status === "final"
-      ? `${ravens.result} ${ravens.goals}–${opponent.goals}`
-      : game.time;
-
-    return {
-      date: game.date,
-      opponent: opponent.title,
-      venue: game.location,
-      game: game.number,
-      home,
-      result,
-    };
-  });
-}
-
-const roster = [
-  { number: "2", name: "Lucas Haddaway" },
-  { number: "3", name: "Matthew Melo" },
-  { number: "6", name: "Liam O’Hagan" },
-  { number: "9", name: "Jenson White" },
-  { number: "12", name: "Joshua Sweet" },
-  { number: "13", name: "Austin Fraser" },
-  { number: "14", name: "Terrance Barrina" },
-  { number: "15", name: "Jack Mullen" },
-  { number: "16", name: "Ryan Perry" },
-  { number: "17", name: "Kian McGuigan" },
-  { number: "19", name: "Elliot Holt" },
-  { number: "20", name: "Hayden Grant" },
-  { number: "21", name: "Griffin Armstrong" },
-  { number: "23", name: "Jack Richards" },
-  { number: "25", name: "Josh Brunton" },
-  { number: "27", name: "Noah Barker" },
-  { number: "27", name: "Ryan McDonald" },
-  { number: "28", name: "Jacob Nassar" },
-  { number: "29", name: "Evan Rheaume" },
-  { number: "31", name: "Alex D’Angelo" },
-  { number: "33", name: "Liam Clark" },
-  { number: "35", name: "Jonah Steenbakkers" },
-  { number: "44", name: "Logan Grant" },
-  { number: "55", name: "Carter Smith" },
-  { number: "66", name: "Cooper Delorey" },
-  { number: "86", name: "Chris Scissons" },
-  { number: "88", name: "Chris Edel" },
-];
-
 const staff = [
   { role: "Head Coach", detail: "Colin Gallagher", email: "colingallagher96@gmail.com", photo: "Colin-Gallagher.jpg" },
   { role: "Head Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com", photo: "Jacob-Gasperetti.jpg" },
@@ -220,123 +79,49 @@ const staff = [
   { role: "Director of Stats, Analytics, and Video", detail: "Tyler Rohleder", email: "tylerjrohleder17@gmail.com", photo: "Tyler-Rohleder.jpg" },
 ];
 
-function parseGamesheetTeamData(html: string): GamesheetTeamData {
-  const normalized = html.replaceAll("\\\"", "\"");
-  const playerPattern = /"firstName":"([^"]+)".*?"jersey":"([^"]+)".*?"lastName":"([^"]+)".*?"stats":\{([^{}]+)\}/gs;
-  const knownNames = new Map(roster.map((player) => [
-    `${player.number}-${player.name.toLocaleUpperCase()}`,
-    player.name,
-  ]));
-  const seenPlayers = new Set<string>();
-  const parsedRoster: { number: string; name: string }[] = [];
-  const parsedPlayerStats: PlayerStat[] = [];
-  let parsedGoalie: GoalieStat | null = null;
-  let match: RegExpExecArray | null;
 
-  function formatName(firstName: string, lastName: string, number: string) {
-    const sourceName = `${firstName} ${lastName}`;
-    const knownName = knownNames.get(`${number}-${sourceName.toLocaleUpperCase()}`);
-    if (knownName) return knownName;
-    return sourceName
-      .toLocaleLowerCase()
-      .replace(/(^|[\s’'-])\p{L}/gu, (letter) => letter.toLocaleUpperCase());
-  }
+const DATA_REFRESH_MS = 30 * 60 * 1000;
 
-  while ((match = playerPattern.exec(normalized)) !== null) {
-    const [, firstName, number, lastName, rawStats] = match;
-    const playerKey = `${number}-${firstName}-${lastName}`;
-    if (seenPlayers.has(playerKey)) continue;
-    seenPlayers.add(playerKey);
-
-    const stats = JSON.parse(`{${rawStats}}`) as Record<string, number | boolean>;
-    const name = formatName(firstName, lastName, number);
-    parsedRoster.push({ number, name });
-
-    if (Number.isFinite(stats.gaa)) {
-      parsedGoalie = {
-        number,
-        name,
-        gp: Number(stats.gp),
-        wins: Number(stats.wins),
-        losses: Number(stats.losses),
-        shotsAgainst: Number(stats.sa),
-        goalsAgainst: Number(stats.ga),
-        goalsAgainstAverage: Number(stats.gaa),
-        savePercentage: Number(stats.svpct),
-      };
-    } else {
-      parsedPlayerStats.push({
-        number,
-        name,
-        gp: Number(stats.gp),
-        goals: Number(stats.g),
-        assists: Number(stats.a),
-        points: Number(stats.pts),
-        pim: Number(stats.pim),
-      });
-    }
-  }
-
-  const standingsMatch = normalized.match(
-    /"teamStandings":\{"record":"([^"]+)","pts":([0-9.]+),"rank":([0-9.]+),"division":"([^"]+)","stats":\{([^{}]+)\}/s,
-  );
-  if (parsedRoster.length < 20 || parsedPlayerStats.length < 20 || !parsedGoalie || !standingsMatch) {
-    throw new Error("Gamesheet team payload was incomplete");
-  }
-
-  const standingsStats = JSON.parse(`{${standingsMatch[5]}}`) as Record<string, number | string>;
-  parsedRoster.sort((first, second) =>
-    Number(first.number) - Number(second.number) || first.name.localeCompare(second.name),
-  );
-
-  return {
-    roster: parsedRoster,
-    playerStats: parsedPlayerStats,
-    goalie: parsedGoalie,
-    standings: {
-      record: standingsMatch[1],
-      points: Number(standingsMatch[2]),
-      rank: Number(standingsMatch[3]),
-      division: standingsMatch[4],
-      gamesPlayed: Number(standingsStats.GP),
-      goalsFor: Number(standingsStats.GF),
-      goalsAgainst: Number(standingsStats.GA),
-      penaltyMinutes: Number(standingsStats.PIM),
-      powerPlayGoals: Number(standingsStats.PPG),
-    },
-  };
-}
-
-function useLiveGamesheetTeamData() {
-  const [data, setData] = useState<GamesheetTeamData | null>(null);
+function useStaticJson<T>(file: string, isValid: (value: unknown) => value is T) {
+  const [data, setData] = useState<T | null>(null);
   const [feedStatus, setFeedStatus] = useState<"loading" | "live" | "fallback">("loading");
 
   useEffect(() => {
     let active = true;
 
-    async function refreshTeamData() {
+    async function refresh() {
       try {
-        const response = await fetch(GAMESHEET_TEAM_SOURCE, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Gamesheet returned ${response.status}`);
-        const nextData = parseGamesheetTeamData(await response.text());
+        const response = await fetch(`${import.meta.env.BASE_URL}data/${file}?t=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Data file returned ${response.status}`);
+        const next: unknown = await response.json();
+        if (!isValid(next)) throw new Error("Data file was invalid");
         if (active) {
-          setData(nextData);
+          setData(next);
           setFeedStatus("live");
         }
       } catch {
-        if (active) setFeedStatus("fallback");
+        if (active) setFeedStatus((status) => (status === "live" ? "live" : "fallback"));
       }
     }
 
-    refreshTeamData();
-    const refreshTimer = window.setInterval(refreshTeamData, 5 * 60 * 1000);
+    refresh();
+    const timer = window.setInterval(refresh, DATA_REFRESH_MS);
     return () => {
       active = false;
-      window.clearInterval(refreshTimer);
+      window.clearInterval(timer);
     };
-  }, []);
+  }, [file, isValid]);
 
   return { data, feedStatus };
+}
+
+const isTeamData = (value: unknown): value is GamesheetTeamData =>
+  !!value && Array.isArray((value as GamesheetTeamData).roster) && Array.isArray((value as GamesheetTeamData).playerStats) &&
+  !!(value as GamesheetTeamData).goalie && !!(value as GamesheetTeamData).standings;
+const isSchedule = (value: unknown): value is ScheduleGame[] => Array.isArray(value) && value.length > 0;
+
+function useLiveGamesheetTeamData() {
+  return useStaticJson("team.json", isTeamData);
 }
 
 function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map" | "menu" | "users"; size?: number }) {
@@ -623,7 +408,7 @@ function Roster() {
       <div className="source-note">
         <span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} />
         {feedStatus === "live"
-          ? `${rosterPlayers.length} athletes · Live Gamesheet feed · Refreshes every five minutes`
+          ? `${rosterPlayers.length} athletes · Live Gamesheet feed · Refreshes every 30 minutes`
           : feedStatus === "loading"
             ? `${rosterPlayers.length} athletes · Refreshing Gamesheet`
             : `${rosterPlayers.length} athletes · Verified fallback · September 2026`}
@@ -791,40 +576,15 @@ function Stats() {
 
       <div className="stats-source">
         <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET DATA" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
-        <p>{feedStatus === "live" ? "Roster and statistics refresh every five minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
+        <p>{feedStatus === "live" ? "Roster, statistics, and schedule refresh every 30 minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
       </div>
     </section>
   );
 }
 
 function Schedule() {
-  const [games, setGames] = useState<ScheduleGame[]>(scheduleFallback);
-  const [feedStatus, setFeedStatus] = useState<"loading" | "live" | "fallback">("loading");
-
-  useEffect(() => {
-    let active = true;
-
-    async function refreshSchedule() {
-      try {
-        const response = await fetch(GAMESHEET_SCHEDULE_SOURCE, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Gamesheet returned ${response.status}`);
-        const nextGames = normalizeSchedule(extractGamesheetGames(await response.text()));
-        if (active && nextGames.length > 0) {
-          setGames(nextGames);
-          setFeedStatus("live");
-        }
-      } catch {
-        if (active) setFeedStatus("fallback");
-      }
-    }
-
-    refreshSchedule();
-    const refreshTimer = window.setInterval(refreshSchedule, 5 * 60 * 1000);
-    return () => {
-      active = false;
-      window.clearInterval(refreshTimer);
-    };
-  }, []);
+  const { data, feedStatus } = useStaticJson("schedule.json", isSchedule);
+  const games = data ?? scheduleFallback;
 
   return (
     <section className="data-section reveal">
@@ -875,7 +635,7 @@ function Schedule() {
       </div>
       <div className="stats-source">
         <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET FEED" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
-        <p>{feedStatus === "live" ? "Automatically refreshes every five minutes" : "The last verified schedule is shown while the live feed is unavailable"}</p>
+        <p>{feedStatus === "live" ? "Automatically refreshes every 30 minutes" : "The last verified schedule is shown while the live feed is unavailable"}</p>
       </div>
     </section>
   );
