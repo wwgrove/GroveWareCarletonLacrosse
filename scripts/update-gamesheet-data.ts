@@ -1,4 +1,5 @@
 import { mkdir, writeFile } from "node:fs/promises";
+import { chromium } from "playwright";
 import {
   CARLETON_TEAM_ID,
   GAMESHEET_SCHEDULE_SOURCE,
@@ -20,25 +21,43 @@ const BROWSER_HEADERS = {
   referer: "https://gamesheetstats.com/",
 };
 
-async function download(url: string, attempts = 3) {
-  let lastError: unknown;
-  for (let attempt = 1; attempt <= attempts; attempt++) {
-    try {
-      const response = await fetch(url, { headers: BROWSER_HEADERS });
-      if (!response.ok) throw new Error(`Gamesheet returned ${response.status} for ${url}`);
-      return await response.text();
-    } catch (error) {
-      lastError = error;
-      if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+// Gamesheet sits behind Cloudflare, so plain fetch() gets 403 from CI. A real Chromium solves the JS challenge.
+async function downloadAll(urls: string[]) {
+  const browser = await chromium.launch({ headless: true, args: ["--disable-blink-features=AutomationControlled"] });
+  try {
+    const context = await browser.newContext({
+      userAgent: BROWSER_HEADERS["user-agent"],
+      locale: "en-CA",
+      timezoneId: "America/Toronto",
+    });
+    const pages: string[] = [];
+    for (const url of urls) {
+      const page = await context.newPage();
+      let html = "";
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
+        // Wait out Cloudflare's "Just a moment..." interstitial.
+        await page.waitForFunction(() => !/just a moment/i.test(document.title), undefined, { timeout: 45_000 }).catch(() => {});
+        await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {});
+        html = await page.content();
+        if (!/just a moment/i.test(await page.title())) break;
+        html = "";
+        await page.waitForTimeout(attempt * 3000);
+      }
+      await page.close();
+      if (!html) throw new Error(`Cloudflare challenge was not solved for ${url}`);
+      pages.push(html);
     }
+    return pages;
+  } finally {
+    await browser.close();
   }
-  throw lastError;
 }
 
-const [rosterHtml, statsHtml, scheduleHtml] = await Promise.all([
-  download(GAMESHEET_TEAM_SOURCE),
-  download(GAMESHEET_STATS_SOURCE),
-  download(GAMESHEET_SCHEDULE_SOURCE),
+const [rosterHtml, statsHtml, scheduleHtml] = await downloadAll([
+  GAMESHEET_TEAM_SOURCE,
+  GAMESHEET_STATS_SOURCE,
+  GAMESHEET_SCHEDULE_SOURCE,
 ]);
 
 // Stats live on the team-stats page and the roster on the roster page; either may carry the full payload.
