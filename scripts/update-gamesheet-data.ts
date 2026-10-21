@@ -23,12 +23,21 @@ const BROWSER_HEADERS = {
 
 // Gamesheet sits behind Cloudflare, so plain fetch() gets 403 from CI. A real Chromium solves the JS challenge.
 async function downloadAll(urls: string[]) {
-  const browser = await chromium.launch({ headless: true, args: ["--disable-blink-features=AutomationControlled"] });
+  const browser = await chromium.launch({
+    // Cloudflare fingerprints headless Chromium; run headed (under xvfb in CI) to look like a real browser.
+    headless: process.env.GAMESHEET_HEADLESS === "1",
+    args: ["--disable-blink-features=AutomationControlled", "--no-sandbox"],
+  });
   try {
     const context = await browser.newContext({
       userAgent: BROWSER_HEADERS["user-agent"],
       locale: "en-CA",
       timezoneId: "America/Toronto",
+      viewport: { width: 1366, height: 768 },
+      extraHTTPHeaders: { "accept-language": BROWSER_HEADERS["accept-language"] },
+    });
+    await context.addInitScript(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
     });
     const pages: string[] = [];
     for (const url of urls) {
@@ -37,7 +46,7 @@ async function downloadAll(urls: string[]) {
       for (let attempt = 1; attempt <= 3; attempt++) {
         await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
         // Wait out Cloudflare's "Just a moment..." interstitial.
-        await page.waitForFunction(() => !/just a moment/i.test(document.title), undefined, { timeout: 45_000 }).catch(() => {});
+        await page.waitForFunction(() => !/just a moment/i.test(document.title), undefined, { timeout: 60_000 }).catch(() => {});
         await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {});
         html = await page.content();
         if (!/just a moment/i.test(await page.title())) break;
@@ -54,11 +63,31 @@ async function downloadAll(urls: string[]) {
   }
 }
 
-const [rosterHtml, statsHtml, scheduleHtml] = await downloadAll([
-  GAMESHEET_TEAM_SOURCE,
-  GAMESHEET_STATS_SOURCE,
-  GAMESHEET_SCHEDULE_SOURCE,
-]);
+// Optional hosted fallback (e.g. a scraping API that renders pages and bypasses Cloudflare). The secret is a URL
+// template containing {url}, e.g. https://api.example.com/?api_key=KEY&render_js=true&url={url}
+async function downloadViaService(template: string, urls: string[]) {
+  return Promise.all(urls.map(async (url) => {
+    const response = await fetch(template.replace("{url}", encodeURIComponent(url)), { signal: AbortSignal.timeout(120_000) });
+    if (!response.ok) throw new Error(`Fetch service returned ${response.status} for ${url}`);
+    return response.text();
+  }));
+}
+
+const sources = [GAMESHEET_TEAM_SOURCE, GAMESHEET_STATS_SOURCE, GAMESHEET_SCHEDULE_SOURCE];
+const zenRowsKey = process.env.ZENROWS_API_KEY;
+const fetchServiceTemplate = process.env.GAMESHEET_FETCH_URL_TEMPLATE ||
+  (zenRowsKey
+    ? `https://api.zenrows.com/v1/?apikey=${encodeURIComponent(zenRowsKey)}&js_render=true&premium_proxy=true&wait=5000&url={url}`
+    : undefined);
+let pagesHtml: string[];
+try {
+  pagesHtml = await downloadAll(sources);
+} catch (error) {
+  if (!fetchServiceTemplate) throw error;
+  console.warn(`Browser fetch failed (${(error as Error).message}); using hosted fetch service`);
+  pagesHtml = await downloadViaService(fetchServiceTemplate, sources);
+}
+const [rosterHtml, statsHtml, scheduleHtml] = pagesHtml;
 
 // Stats live on the team-stats page and the roster on the roster page; either may carry the full payload.
 const team = [statsHtml, rosterHtml, statsHtml + rosterHtml].reduce<ReturnType<typeof parseGamesheetTeamData> | null>(
