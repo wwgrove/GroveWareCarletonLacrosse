@@ -66,6 +66,8 @@ type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "point
 const CARLETON_TEAM_ID = 550883;
 const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
 const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
+const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=carletonlacrosse%40gmail.com&ctz=America%2FNew_York";
+const DONATIONS_URL = "https://futurefunder.carleton.ca/giving-fund/mens-lacrosse-competitive-club-giving/";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
 const HERO_IMAGES_API_URL = "https://api.github.com/repos/wwgrove/CarletonLacrosseWebpage/contents/hero-carosel-photos";
 const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
@@ -513,15 +515,17 @@ export default function App() {
           <HeroCarousel />
           <div className="hero-overlay" />
           <div className="hero-line" />
-          <a
-            className="hero-social-link"
-            href="https://www.instagram.com/carletonlax/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Visit Carleton Lacrosse on Instagram"
-          >
-            <img src="/instagram.svg" alt="" />
-          </a>
+          <nav className="hero-action-links" aria-label="Carleton Lacrosse links">
+            <a href="https://www.instagram.com/carletonlax/" target="_blank" rel="noreferrer" aria-label="Visit Carleton Lacrosse on Instagram">
+              <img src="/instagram.svg" alt="" />
+            </a>
+            <a href={GOOGLE_CALENDAR_URL} target="_blank" rel="noreferrer" aria-label="Open the Carleton Lacrosse team calendar">
+              <img src="/calendar.svg" alt="" />
+            </a>
+            <a href={DONATIONS_URL} target="_blank" rel="noreferrer" aria-label="Donate to Carleton men's lacrosse">
+              <img src="/donations.svg" alt="" />
+            </a>
+          </nav>
           <div className="hero-content reveal is-visible">
             <div className="eyebrow">
               <span className="hero-eyebrow-copy">
@@ -821,21 +825,46 @@ function Schedule() {
         <div><div className="eyebrow dark">CUFLA 2026</div><h2>SCHEDULE</h2></div>
         <p>Ten-game regular-season schedule from the supplied Gamesheet team page. All times are shown in Eastern Time.</p>
       </div>
-      <div className="schedule-list" role="table" aria-label="Carleton Ravens 2026 schedule">
-        <div className="schedule-row schedule-head" role="row">
-          <span role="columnheader">Date</span><span role="columnheader">Matchup</span><span role="columnheader">Result / Time</span><span role="columnheader">Location</span>
-        </div>
-        {games.map((game) => (
-          <div className={`schedule-row ${game.result.startsWith("L") ? "is-final" : "is-upcoming"}`} role="row" key={`${game.date}-${game.opponent}`}>
-            <span role="cell" className="schedule-date">{game.date}</span>
-            <span role="cell" className="matchup">
-              <small>{game.home ? "HOME" : "AWAY"}</small>
-              <strong>{game.home ? "vs." : "at"} {game.opponent}</strong>
-            </span>
-            <strong role="cell" className="game-result">{game.result}</strong>
-            <span role="cell">{game.venue}</span>
+      <div className="schedule-layout">
+        <div className="game-schedule">
+          <div className="schedule-panel-heading">
+            <span>GAME SCHEDULE</span>
+            <strong>2026 SEASON</strong>
           </div>
-        ))}
+          <div className="schedule-list" role="table" aria-label="Carleton Ravens 2026 schedule">
+            <div className="schedule-row schedule-head" role="row">
+              <span role="columnheader">Date</span><span role="columnheader">Matchup</span><span role="columnheader">Result / Time</span><span role="columnheader">Location</span>
+            </div>
+            {games.map((game) => (
+              <div className={`schedule-row ${game.result.startsWith("L") ? "is-final" : "is-upcoming"}`} role="row" key={`${game.date}-${game.opponent}`}>
+                <span role="cell" className="schedule-date">{game.date}</span>
+                <span role="cell" className="matchup">
+                  <small>{game.home ? "HOME" : "AWAY"}</small>
+                  <strong>{game.home ? "vs." : "at"} {game.opponent}</strong>
+                </span>
+                <strong role="cell" className="game-result">{game.result}</strong>
+                <span role="cell">{game.venue}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <aside className="team-calendar" aria-labelledby="team-calendar-title">
+          <div className="schedule-panel-heading calendar-panel-heading">
+            <span>TEAM CALENDAR</span>
+            <strong id="team-calendar-title">PRACTICES & TRAVEL</strong>
+          </div>
+          <div className="calendar-frame">
+            <iframe
+              src={GOOGLE_CALENDAR_URL}
+              title="Carleton Lacrosse team calendar"
+              loading="lazy"
+            />
+          </div>
+          <a className="calendar-open-link" href={GOOGLE_CALENDAR_URL} target="_blank" rel="noreferrer">
+            Open full calendar <Icon name="arrow" />
+          </a>
+        </aside>
       </div>
       <div className="stats-source">
         <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET FEED" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
