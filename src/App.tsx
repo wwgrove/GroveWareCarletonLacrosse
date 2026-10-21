@@ -7,13 +7,14 @@ type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "point
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=carletonlacrosse%40gmail.com&ctz=America%2FNew_York";
 const DONATIONS_URL = "https://futurefunder.carleton.ca/giving-fund/mens-lacrosse-competitive-club-giving/";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
-const HERO_IMAGES_API_URL = "https://api.github.com/repos/wwgrove/CarletonLacrosseWebpage/contents/hero-carosel-photos";
+const HERO_IMAGE_MODULES = import.meta.glob("./assets/hero/*.{jpg,jpeg,JPG,JPEG,png,webp,avif}", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
+const STAFF_PHOTO_MODULES = import.meta.glob("./assets/staff/*.{jpg,jpeg,JPG,JPEG,png,webp}", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
+const HERO_IMAGE_URLS = Object.values(HERO_IMAGE_MODULES);
 const PUBLIC_ASSET_BASE = import.meta.env.BASE_URL;
 const HERO_FALLBACK_IMAGE = `${PUBLIC_ASSET_BASE}ravens-lacrosse-hero.jpg`;
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
-const STAFF_PHOTO_BASE_URL = "https://raw.githubusercontent.com/wwgrove/CarletonLacrosseWebpage/f0b31f57f91bb798ed63871575e02e7504447f2e/Coaches-Head-Shots";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -164,7 +165,7 @@ function HeroCarousel() {
       try {
         const parsed = JSON.parse(localStorage.getItem(HERO_CACHE_KEY) ?? "[]");
         return Array.isArray(parsed)
-          ? parsed.filter((value): value is string => typeof value === "string" && value.length > 0)
+          ? parsed.filter((value): value is string => typeof value === "string" && HERO_IMAGE_URLS.includes(value))
           : [];
       } catch {
         return [];
@@ -203,37 +204,13 @@ function HeroCarousel() {
         return;
       }
 
-      try {
-        const response = await fetch(HERO_IMAGES_API_URL, {
-          headers: {
-            Accept: "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-          },
-        });
-        if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
-        const contents = await response.json() as Array<{
-          name?: string;
-          type?: string;
-          download_url?: string | null;
-        }>;
-        const imageUrls = contents
-          .filter((item) =>
-            item.type === "file"
-            && typeof item.download_url === "string"
-            && /\.(jpe?g|png|webp|gif|avif)$/i.test(item.name ?? ""),
-          )
-          .map((item) => item.download_url as string);
-        if (imageUrls.length === 0) throw new Error("The GitHub hero folder contained no supported images");
-
-        const shuffledImages = shuffleImages(imageUrls);
-        saveHeroCache(shuffledImages);
-        if (active) setImages(shuffledImages);
-      } catch (error) {
-        console.error("Unable to refresh hero carousel images", error);
-        const fallbackImages = cachedImages.length > 0 ? cachedImages : [HERO_FALLBACK_IMAGE];
-        saveHeroCache(fallbackImages);
-        if (active) setImages(fallbackImages);
+      if (HERO_IMAGE_URLS.length === 0) {
+        if (active) setImages([HERO_FALLBACK_IMAGE]);
+        return;
       }
+      const shuffledImages = shuffleImages(HERO_IMAGE_URLS);
+      saveHeroCache(shuffledImages);
+      if (active) setImages(shuffledImages);
     }
 
     loadHeroImages();
@@ -653,7 +630,7 @@ function Staff() {
         {staff.map((person) => (
           <article className="staff-card" key={person.detail}>
             <div className="staff-placeholder">
-              <img src={person.photo.startsWith("https://") ? person.photo : `${STAFF_PHOTO_BASE_URL}/${person.photo}`} alt={`${person.detail}, ${person.role}`} loading="lazy" />
+              <img src={STAFF_PHOTO_MODULES[`./assets/staff/${person.photo}`]} alt={`${person.detail}, ${person.role}`} loading="lazy" />
             </div>
             <div>
               <span>{person.role}</span>
