@@ -585,8 +585,8 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
       <section className="info-grid reveal">
         <article className="feature-card">
           <span className="card-number">01</span><Icon name="users" size={28} /><h3>JOIN THE RAVENS</h3>
-          <p>Interested in competing at Carleton? Request a recruitment package and learn about training camp, eligibility, and the club experience.</p>
-          <a href="mailto:carletonlacrosse@gmail.com">carletonlacrosse@gmail.com <Icon name="arrow" /></a>
+          <p>Interested in competing at Carleton? Fill out our recruiting portal to get on our radar. For general information, requests, or other inquiries, please reach out to us at carletonlacrosse@gmail.com.</p>
+          <button type="button" onClick={() => onSelect("recruiting")}>Open recruiting portal <Icon name="arrow" /></button>
         </article>
         <article className="feature-card red-card">
           <span className="card-number">02</span><Icon name="calendar" size={28} /><h3>THE SEASON</h3>
