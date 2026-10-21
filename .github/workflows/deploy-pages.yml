@@ -35,10 +35,12 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: Refresh Gamesheet data
-        run: pnpm run update-data
+        run: pnpm run update-data || echo "::error title=Gamesheet refresh failed::Deploying with stale fallback data"
         continue-on-error: true
-        timeout-minutes: 5
+        timeout-minutes: 10
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
