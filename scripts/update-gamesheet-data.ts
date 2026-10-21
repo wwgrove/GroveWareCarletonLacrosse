@@ -63,11 +63,27 @@ async function downloadAll(urls: string[]) {
   }
 }
 
-const [rosterHtml, statsHtml, scheduleHtml] = await downloadAll([
-  GAMESHEET_TEAM_SOURCE,
-  GAMESHEET_STATS_SOURCE,
-  GAMESHEET_SCHEDULE_SOURCE,
-]);
+// Optional hosted fallback (e.g. a scraping API that renders pages and bypasses Cloudflare). The secret is a URL
+// template containing {url}, e.g. https://api.example.com/?api_key=KEY&render_js=true&url={url}
+async function downloadViaService(template: string, urls: string[]) {
+  return Promise.all(urls.map(async (url) => {
+    const response = await fetch(template.replace("{url}", encodeURIComponent(url)), { signal: AbortSignal.timeout(120_000) });
+    if (!response.ok) throw new Error(`Fetch service returned ${response.status} for ${url}`);
+    return response.text();
+  }));
+}
+
+const sources = [GAMESHEET_TEAM_SOURCE, GAMESHEET_STATS_SOURCE, GAMESHEET_SCHEDULE_SOURCE];
+const fetchServiceTemplate = process.env.GAMESHEET_FETCH_URL_TEMPLATE;
+let pagesHtml: string[];
+try {
+  pagesHtml = await downloadAll(sources);
+} catch (error) {
+  if (!fetchServiceTemplate) throw error;
+  console.warn(`Browser fetch failed (${(error as Error).message}); using hosted fetch service`);
+  pagesHtml = await downloadViaService(fetchServiceTemplate, sources);
+}
+const [rosterHtml, statsHtml, scheduleHtml] = pagesHtml;
 
 // Stats live on the team-stats page and the roster on the roster page; either may carry the full payload.
 const team = [statsHtml, rosterHtml, statsHtml + rosterHtml].reduce<ReturnType<typeof parseGamesheetTeamData> | null>(

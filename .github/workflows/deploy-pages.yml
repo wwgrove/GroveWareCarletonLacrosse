@@ -41,6 +41,8 @@ jobs:
         run: xvfb-run --auto-servernum --server-args="-screen 0 1366x768x24" pnpm run update-data || echo "::error title=Gamesheet refresh failed::Deploying with stale fallback data"
         continue-on-error: true
         timeout-minutes: 10
+        env:
+          GAMESHEET_FETCH_URL_TEMPLATE: ${{ secrets.GAMESHEET_FETCH_URL_TEMPLATE }}
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
