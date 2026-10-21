@@ -62,6 +62,7 @@ export type GamesheetTeamData = {
 
 export const CARLETON_TEAM_ID = 550883;
 export const GAMESHEET_TEAM_SOURCE = "https://gamesheetstats.com/seasons/15751/teams/550883/roster?configuration=625";
+export const GAMESHEET_STATS_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/team-stats?");
 export const GAMESHEET_SCHEDULE_SOURCE = GAMESHEET_TEAM_SOURCE.replace("/roster?", "/schedule?");
 
 export function extractGamesheetGames(html: string): GamesheetGame[] {
