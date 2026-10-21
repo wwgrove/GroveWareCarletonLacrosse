@@ -72,7 +72,7 @@ const staff = [
   { role: "Head Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com", photo: "Jacob-Gasperetti.jpg" },
   { role: "Assistant Coach", detail: "Nic Ayoub", email: "buoya24@hotmail.com", photo: "Nic-Ayoub.jpg" },
   { role: "Assistant Coach", detail: "Alex Beauvais", email: "beauvaisalex@hotmail.ca", photo: "Alex-Beauvais.jpg" },
-  { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com", photo: "https://raw.githubusercontent.com/wwgrove/CarletonLacrosseWebpage/main/Coaches-Head-Shots/Mark-Lange.jpg?v=468dc07a82253a92e51d3f8d7200083660b83918" },
+  { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com", photo: "Mark-Lange.jpg" },
   { role: "Athletic Trainer", detail: "Ashley Baldwin", email: "ashleybaldwin10@hotmail.com", photo: "Ashley-Baldwin.jpg" },
   { role: "Equipment Manager", detail: "Will Wingrove", email: "will@thewingroves.com", photo: "Will-Wingrove.jpg" },
   { role: "President and GM", detail: "Brock Conley", email: "brockpconley@gmail.com", photo: "Brock-Conely.jpg" },
