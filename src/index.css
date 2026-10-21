@@ -19,8 +19,8 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: var(--paper); }
+html { scroll-behavior: smooth; background: #000; }
+body { margin: 0; min-width: 320px; padding-top: env(safe-area-inset-top); background: var(--paper); }
 button, a { font: inherit; }
 button { cursor: pointer; }
 .site-shell { min-height: 100vh; overflow: hidden; }
