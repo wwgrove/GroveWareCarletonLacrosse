@@ -80,7 +80,7 @@ const staff = [
 ];
 
 
-const DATA_REFRESH_MS = 5 * 60 * 1000;
+const DATA_REFRESH_MS = 30 * 60 * 1000;
 
 function useStaticJson<T>(file: string, isValid: (value: unknown) => value is T) {
   const [data, setData] = useState<T | null>(null);
@@ -408,7 +408,7 @@ function Roster() {
       <div className="source-note">
         <span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} />
         {feedStatus === "live"
-          ? `${rosterPlayers.length} athletes · Live Gamesheet feed · Refreshes every five minutes`
+          ? `${rosterPlayers.length} athletes · Live Gamesheet feed · Refreshes every 30 minutes`
           : feedStatus === "loading"
             ? `${rosterPlayers.length} athletes · Refreshing Gamesheet`
             : `${rosterPlayers.length} athletes · Verified fallback · September 2026`}
@@ -576,7 +576,7 @@ function Stats() {
 
       <div className="stats-source">
         <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET DATA" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
-        <p>{feedStatus === "live" ? "Roster, statistics, and schedule refresh every five minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
+        <p>{feedStatus === "live" ? "Roster, statistics, and schedule refresh every 30 minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
       </div>
     </section>
   );
@@ -635,7 +635,7 @@ function Schedule() {
       </div>
       <div className="stats-source">
         <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET FEED" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
-        <p>{feedStatus === "live" ? "Automatically refreshes every five minutes" : "The last verified schedule is shown while the live feed is unavailable"}</p>
+        <p>{feedStatus === "live" ? "Automatically refreshes every 30 minutes" : "The last verified schedule is shown while the live feed is unavailable"}</p>
       </div>
     </section>
   );
