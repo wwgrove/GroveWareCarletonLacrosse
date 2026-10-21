@@ -492,12 +492,18 @@ export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    const revealElements = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      revealElements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("is-visible");
       });
     }, { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    revealElements.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, [activeTab]);
 
