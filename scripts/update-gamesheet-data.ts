@@ -12,12 +12,26 @@ const OUTPUT_DIR = new URL("../public/data/", import.meta.url);
 const MIN_ROSTER_SIZE = 20;
 const EXPECTED_GAMES = 10;
 
-async function download(url: string) {
-  const response = await fetch(url, {
-    headers: { "user-agent": "Mozilla/5.0 (compatible; CarletonLacrosseSite/1.0)", accept: "text/html" },
-  });
-  if (!response.ok) throw new Error(`Gamesheet returned ${response.status} for ${url}`);
-  return response.text();
+const BROWSER_HEADERS = {
+  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+  accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+  "accept-language": "en-CA,en;q=0.9",
+  referer: "https://gamesheetstats.com/",
+};
+
+async function download(url: string, attempts = 3) {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const response = await fetch(url, { headers: BROWSER_HEADERS });
+      if (!response.ok) throw new Error(`Gamesheet returned ${response.status} for ${url}`);
+      return await response.text();
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+    }
+  }
+  throw lastError;
 }
 
 const [teamHtml, scheduleHtml] = await Promise.all([download(GAMESHEET_TEAM_SOURCE), download(GAMESHEET_SCHEDULE_SOURCE)]);
