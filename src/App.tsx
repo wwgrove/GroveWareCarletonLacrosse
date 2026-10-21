@@ -70,7 +70,8 @@ const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=carl
 const DONATIONS_URL = "https://futurefunder.carleton.ca/giving-fund/mens-lacrosse-competitive-club-giving/";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
 const HERO_IMAGES_API_URL = "https://api.github.com/repos/wwgrove/CarletonLacrosseWebpage/contents/hero-carosel-photos";
-const HERO_FALLBACK_IMAGE = "/ravens-lacrosse-hero.jpg";
+const PUBLIC_ASSET_BASE = import.meta.env.BASE_URL;
+const HERO_FALLBACK_IMAGE = `${PUBLIC_ASSET_BASE}ravens-lacrosse-hero.jpg`;
 const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
 const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
@@ -517,13 +518,13 @@ export default function App() {
           <div className="hero-line" />
           <nav className="hero-action-links" aria-label="Carleton Lacrosse links">
             <a href="https://www.instagram.com/carletonlax/" target="_blank" rel="noreferrer" aria-label="Visit Carleton Lacrosse on Instagram">
-              <img src="/instagram.svg" alt="" />
+              <img src={`${PUBLIC_ASSET_BASE}instagram.svg`} alt="" />
             </a>
             <a href={GOOGLE_CALENDAR_URL} target="_blank" rel="noreferrer" aria-label="Open the Carleton Lacrosse team calendar">
-              <img src="/calendar.svg" alt="" />
+              <img src={`${PUBLIC_ASSET_BASE}calendar.svg`} alt="" />
             </a>
             <a href={DONATIONS_URL} target="_blank" rel="noreferrer" aria-label="Donate to Carleton men's lacrosse">
-              <img src="/donations.svg" alt="" />
+              <img src={`${PUBLIC_ASSET_BASE}donations.svg`} alt="" />
             </a>
           </nav>
           <div className="hero-content reveal is-visible">
