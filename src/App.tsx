@@ -1033,6 +1033,11 @@ function Recruiting() {
             </label>
           </div>
 
+          <label className="consent-field">
+            <input type="checkbox" name="dataConsent" value="acknowledged" required />
+            <span>Check this box to acknowledge that your provided data will be stored by Carleton Lacrosse Staff for future evaluation and communication. <b>*</b></span>
+          </label>
+
           <div className="form-submit-row">
             <button type="submit" id="submitBtn" disabled={formStatus === "submitting"}>
               {formStatus === "submitting" ? "Submitting..." : "Submit Player Profile"}

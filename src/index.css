@@ -230,6 +230,10 @@ button { cursor: pointer; }
 .form-field select:focus,
 .form-field textarea:focus { border-color: var(--raven-red); outline: 0; background: var(--white); box-shadow: 0 0 0 3px rgba(233,28,36,.12); }
 .form-field-full { grid-column: 1 / -1; }
+.consent-field { display: flex; align-items: flex-start; gap: 14px; margin-top: 34px; color: #5e5d5a; font-size: 13px; line-height: 1.6; cursor: pointer; }
+.consent-field input { width: 20px; height: 20px; flex: 0 0 20px; margin: 1px 0 0; accent-color: var(--raven-red); cursor: pointer; }
+.consent-field input:focus-visible { outline: 3px solid rgba(233,28,36,.22); outline-offset: 3px; }
+.consent-field b { color: var(--raven-red); }
 .form-submit-row { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 32px; margin-top: 42px; padding-top: 34px; border-top: 1px solid var(--line); }
 .form-submit-row button { display: inline-flex; min-height: 66px; align-items: center; justify-content: space-between; gap: 32px; padding: 0 28px; border: 0; color: var(--white); background: var(--raven-red); font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .form-submit-row button:hover:not(:disabled) { background: var(--raven-red-dark); }
