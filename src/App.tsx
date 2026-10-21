@@ -69,7 +69,7 @@ const scheduleFallback: ScheduleGame[] = [
 
 const staff = [
   { role: "Head Coach", detail: "Colin Gallagher", email: "colingallagher96@gmail.com", photo: "Colin-Gallagher.jpg" },
-  { role: "Head Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com", photo: "Jacob-Gasperetti.jpg" },
+  { role: "Assistant Coach", detail: "Jacob Gasperetti", email: "jacobgasperetti10@gmail.com", photo: "Jacob-Gasperetti.jpg" },
   { role: "Assistant Coach", detail: "Nic Ayoub", email: "buoya24@hotmail.com", photo: "Nic-Ayoub.jpg" },
   { role: "Assistant Coach", detail: "Alex Beauvais", email: "beauvaisalex@hotmail.ca", photo: "Alex-Beauvais.jpg" },
   { role: "Assistant Coach", detail: "Mark Lange", email: "marklangejr@hotmail.com", photo: "Mark-Lange.jpg" },
