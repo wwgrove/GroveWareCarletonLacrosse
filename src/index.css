@@ -81,6 +81,7 @@ button { cursor: pointer; }
 .intro-section h2 span { display: block; white-space: nowrap; }
 .section-heading h2 { font-size: clamp(62px, 8vw, 112px); }
 .intro-copy .lead { margin-top: 0; color: var(--ink); font-size: clamp(20px, 2vw, 27px); line-height: 1.45; }
+.intro-copy > p:not(.lead) { margin-top: 12px; }
 .intro-copy > p:not(.lead), .section-heading > p { color: #5e5d5a; font-size: 15px; line-height: 1.8; }
 .text-button { margin-top: 18px; padding: 10px 0; border-bottom: 2px solid var(--raven-red); color: var(--ink); background: transparent; }
 .stat-band { display: grid; grid-template-columns: repeat(4,1fr); color: var(--white); background: var(--raven-red); }
