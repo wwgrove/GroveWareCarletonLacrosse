@@ -42,7 +42,7 @@ jobs:
       - name: Build site
         run: pnpm run build
         env:
-          VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+          VITE_BASE_PATH: ./
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
