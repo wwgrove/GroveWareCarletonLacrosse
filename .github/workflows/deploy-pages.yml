@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Refresh Gamesheet data
-        run: pnpm run update-data
+        run: pnpm run update-data || echo "::error title=Gamesheet refresh failed::Deploying with stale fallback data"
         continue-on-error: true
         timeout-minutes: 5
       - name: Configure GitHub Pages
