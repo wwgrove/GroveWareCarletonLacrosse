@@ -23,12 +23,21 @@ const BROWSER_HEADERS = {
 
 // Gamesheet sits behind Cloudflare, so plain fetch() gets 403 from CI. A real Chromium solves the JS challenge.
 async function downloadAll(urls: string[]) {
-  const browser = await chromium.launch({ headless: true, args: ["--disable-blink-features=AutomationControlled"] });
+  const browser = await chromium.launch({
+    // Cloudflare fingerprints headless Chromium; run headed (under xvfb in CI) to look like a real browser.
+    headless: process.env.GAMESHEET_HEADLESS === "1",
+    args: ["--disable-blink-features=AutomationControlled", "--no-sandbox"],
+  });
   try {
     const context = await browser.newContext({
       userAgent: BROWSER_HEADERS["user-agent"],
       locale: "en-CA",
       timezoneId: "America/Toronto",
+      viewport: { width: 1366, height: 768 },
+      extraHTTPHeaders: { "accept-language": BROWSER_HEADERS["accept-language"] },
+    });
+    await context.addInitScript(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
     });
     const pages: string[] = [];
     for (const url of urls) {
@@ -37,7 +46,7 @@ async function downloadAll(urls: string[]) {
       for (let attempt = 1; attempt <= 3; attempt++) {
         await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
         // Wait out Cloudflare's "Just a moment..." interstitial.
-        await page.waitForFunction(() => !/just a moment/i.test(document.title), undefined, { timeout: 45_000 }).catch(() => {});
+        await page.waitForFunction(() => !/just a moment/i.test(document.title), undefined, { timeout: 60_000 }).catch(() => {});
         await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {});
         html = await page.content();
         if (!/just a moment/i.test(await page.title())) break;

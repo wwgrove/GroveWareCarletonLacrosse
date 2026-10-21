@@ -38,7 +38,7 @@ jobs:
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
       - name: Refresh Gamesheet data
-        run: pnpm run update-data || echo "::error title=Gamesheet refresh failed::Deploying with stale fallback data"
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1366x768x24" pnpm run update-data || echo "::error title=Gamesheet refresh failed::Deploying with stale fallback data"
         continue-on-error: true
         timeout-minutes: 10
       - name: Configure GitHub Pages
