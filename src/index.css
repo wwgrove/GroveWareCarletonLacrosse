@@ -171,6 +171,7 @@ button { cursor: pointer; }
 .schedule-panel-heading { display: flex; min-height: 72px; flex-direction: column; justify-content: center; padding: 14px 24px; color: var(--white); background: var(--ink); border-bottom: 1px solid rgba(255,255,255,.12); }
 .schedule-panel-heading span { color: var(--raven-red); font-size: 10px; font-weight: 800; letter-spacing: .16em; }
 .schedule-panel-heading strong { margin-top: 4px; font-size: 19px; letter-spacing: .04em; }
+.game-schedule { border-top: 5px solid var(--raven-red); }
 .game-schedule .schedule-list { border-top: 0; }
 .game-schedule .schedule-head { display: none; }
 .game-schedule .schedule-row { grid-template-columns: .9fr 1.3fr .75fr; gap: 14px; padding: 0 20px; }
