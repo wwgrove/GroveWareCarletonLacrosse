@@ -74,7 +74,11 @@ async function downloadViaService(template: string, urls: string[]) {
 }
 
 const sources = [GAMESHEET_TEAM_SOURCE, GAMESHEET_STATS_SOURCE, GAMESHEET_SCHEDULE_SOURCE];
-const fetchServiceTemplate = process.env.GAMESHEET_FETCH_URL_TEMPLATE;
+const zenRowsKey = process.env.ZENROWS_API_KEY;
+const fetchServiceTemplate = process.env.GAMESHEET_FETCH_URL_TEMPLATE ||
+  (zenRowsKey
+    ? `https://api.zenrows.com/v1/?apikey=${encodeURIComponent(zenRowsKey)}&js_render=true&premium_proxy=true&wait=5000&url={url}`
+    : undefined);
 let pagesHtml: string[];
 try {
   pagesHtml = await downloadAll(sources);

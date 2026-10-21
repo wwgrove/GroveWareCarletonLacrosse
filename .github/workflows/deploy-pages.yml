@@ -42,6 +42,7 @@ jobs:
         continue-on-error: true
         timeout-minutes: 10
         env:
+          ZENROWS_API_KEY: ${{ secrets.ZENROWS_API_KEY }}
           GAMESHEET_FETCH_URL_TEMPLATE: ${{ secrets.GAMESHEET_FETCH_URL_TEMPLATE }}
       - name: Configure GitHub Pages
         id: pages
