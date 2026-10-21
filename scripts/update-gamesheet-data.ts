@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import {
   CARLETON_TEAM_ID,
   GAMESHEET_SCHEDULE_SOURCE,
+  GAMESHEET_STATS_SOURCE,
   GAMESHEET_TEAM_SOURCE,
   extractGamesheetGames,
   normalizeSchedule,
@@ -34,9 +35,26 @@ async function download(url: string, attempts = 3) {
   throw lastError;
 }
 
-const [teamHtml, scheduleHtml] = await Promise.all([download(GAMESHEET_TEAM_SOURCE), download(GAMESHEET_SCHEDULE_SOURCE)]);
+const [rosterHtml, statsHtml, scheduleHtml] = await Promise.all([
+  download(GAMESHEET_TEAM_SOURCE),
+  download(GAMESHEET_STATS_SOURCE),
+  download(GAMESHEET_SCHEDULE_SOURCE),
+]);
 
-const team = parseGamesheetTeamData(teamHtml);
+// Stats live on the team-stats page and the roster on the roster page; either may carry the full payload.
+const team = [statsHtml, rosterHtml, statsHtml + rosterHtml].reduce<ReturnType<typeof parseGamesheetTeamData> | null>(
+  (found, html) => {
+    if (found) return found;
+    try {
+      return parseGamesheetTeamData(html);
+    } catch (error) {
+      console.warn(`Team payload parse attempt failed: ${(error as Error).message}`);
+      return null;
+    }
+  },
+  null,
+);
+if (!team) throw new Error("Could not parse Gamesheet team data from stats or roster pages");
 const rawGames = extractGamesheetGames(scheduleHtml);
 const schedule = normalizeSchedule(rawGames);
 

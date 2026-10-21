@@ -38,6 +38,7 @@ jobs:
       - name: Refresh Gamesheet data
         run: pnpm run update-data
         continue-on-error: true
+        timeout-minutes: 5
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
