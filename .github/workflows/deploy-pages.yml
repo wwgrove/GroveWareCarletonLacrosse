@@ -48,7 +48,7 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Build site
-        run: pnpm run build
+        run: pnpm run build && pnpm run prerender
         env:
           VITE_BASE_PATH: ./
       - name: Upload Pages artifact
