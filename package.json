@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "oxfmt",
-    "update-data": "node scripts/update-gamesheet-data.ts"
+    "update-data": "node scripts/update-gamesheet-data.ts",
+    "prerender": "node scripts/prerender.ts"
   },
   "dependencies": {
     "react": "^19.0.0",
