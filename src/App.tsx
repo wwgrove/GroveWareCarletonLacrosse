@@ -286,7 +286,7 @@ export default function App() {
           <div className="hero-line" />
           <nav className="hero-action-links" aria-label="Carleton Lacrosse links">
             <a href="https://www.instagram.com/carletonlax/" target="_blank" rel="noreferrer" aria-label="Visit Carleton Lacrosse on Instagram">
-              <img src={`${PUBLIC_ASSET_BASE}instagram.svg`} alt="" />
+              <img className="instagram-icon" src={`${PUBLIC_ASSET_BASE}instagram.svg`} alt="" />
             </a>
             <a href={GOOGLE_CALENDAR_URL} target="_blank" rel="noreferrer" aria-label="Open the Carleton Lacrosse team calendar">
               <img src={`${PUBLIC_ASSET_BASE}calendar.svg`} alt="" />
