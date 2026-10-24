@@ -29,12 +29,13 @@ button { cursor: pointer; }
 .utility-bar { display: flex; align-items: center; justify-content: space-between; min-height: 34px; padding: 0 clamp(24px, 5vw, 80px); border-bottom: 1px solid rgba(255,255,255,.16); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .16em; }
 .utility-links { color: #aaa; }
 .main-nav { display: flex; align-items: center; justify-content: space-between; height: 82px; padding: 0 clamp(24px, 5vw, 80px); }
-.wordmark { display: flex; align-items: center; gap: 12px; color: var(--white); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 25px; font-weight: 800; line-height: .74; letter-spacing: .04em; }
+.wordmark { display: flex; align-items: center; gap: 12px; color: var(--white); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 25px; font-weight: 800; line-height: .74; letter-spacing: .04em; text-decoration: none; }
 .wordmark small { display: block; margin-bottom: 5px; font-size: 12px; letter-spacing: .16em; }
 .wordmark-bird { display: grid; width: 46px; height: 50px; place-items: center; border: 2px solid var(--white); border-radius: 50% 50% 58% 42% / 40% 44% 56% 60%; font-family: Georgia, serif; font-size: 28px; font-style: italic; }
 .nav-links { display: flex; align-items: center; gap: clamp(20px, 3vw, 46px); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.nav-links span { transition: color 180ms ease; }
-.nav-links span:hover { color: var(--raven-red); }
+.nav-links a, .nav-links button { border: 0; padding: 0; color: inherit; background: transparent; font: inherit; text-decoration: none; cursor: pointer; transition: color 180ms ease; }
+.nav-links a:hover, .nav-links button:hover { color: var(--raven-red); }
+.nav-links a:focus-visible, .nav-links button:focus-visible, .menu-button:focus-visible { outline: 2px solid var(--raven-red); outline-offset: 5px; }
 .menu-button { display: none; border: 0; color: var(--white); background: transparent; }
 
 .hero { position: relative; display: flex; min-height: 690px; align-items: flex-end; overflow: hidden; color: var(--white); background: var(--ink); }
@@ -261,7 +262,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
 
 @media (max-width: 900px) {
   .utility-links, .season-mark { display: none; }
-  .nav-links { position: absolute; top: 82px; right: 0; left: 0; display: none; flex-direction: column; align-items: flex-start; padding: 28px; background: var(--ink); }
+  .nav-links { position: absolute; z-index: 2; top: 116px; right: 0; left: 0; display: none; flex-direction: column; align-items: flex-start; padding: 28px; background: var(--ink); }
   .nav-links.is-open { display: flex; }
   .menu-button { display: block; }
   .hero { min-height: 620px; }

@@ -140,10 +140,10 @@ function Icon({ name, size = 20 }: { name: "arrow" | "calendar" | "mail" | "map"
 
 function Wordmark() {
   return (
-    <div className="wordmark" aria-label="Carleton Ravens">
+    <a className="wordmark" href="#top" aria-label="Carleton Ravens home">
       <span className="wordmark-bird">R</span>
       <span><small>CARLETON</small>RAVENS</span>
-    </div>
+    </a>
   );
 }
 
@@ -274,13 +274,41 @@ export default function App() {
     window.requestAnimationFrame(() => document.getElementById("team-content")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
+  function navigateToTab(tab: Tab) {
+    setMobileOpen(false);
+    selectTab(tab);
+  }
+
   return (
     <div className="site-shell">
       <header className="site-header">
+        <div className="utility-bar">
+          <span>CARLETON UNIVERSITY · OTTAWA, ONTARIO</span>
+          <span className="utility-links">CUFLA · EAST DIVISION · 2026–27</span>
+        </div>
+        <div className="main-nav">
+          <Wordmark />
+          <nav className={`nav-links ${mobileOpen ? "is-open" : ""}`} id="main-menu" aria-label="Main navigation">
+            <button type="button" onClick={() => navigateToTab("overview")}>The program</button>
+            <button type="button" onClick={() => navigateToTab("schedule")}>Schedule</button>
+            <button type="button" onClick={() => navigateToTab("recruiting")}>Recruiting</button>
+            <a href={DONATIONS_URL} target="_blank" rel="noreferrer">Support the team</a>
+          </nav>
+          <button
+            className="menu-button"
+            type="button"
+            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="main-menu"
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <Icon name="menu" />
+          </button>
+        </div>
       </header>
 
       <main>
-        <section className="hero">
+        <section className="hero" id="top">
           <HeroCarousel />
           <div className="hero-overlay" />
           <div className="hero-line" />
@@ -308,7 +336,10 @@ export default function App() {
         </section>
 
         <section className="team-nav-wrap" id="team-content">
-          <div className="team-title"></div>
+          <div className="team-title">
+            <span>Official Team Site</span>
+            <strong>Men’s Lacrosse</strong>
+          </div>
           <div className="team-tabs" role="tablist" aria-label="Team information">
             {tabs.map((tab) => (
               <button key={tab.id} className={activeTab === tab.id ? "active" : ""} type="button" role="tab" aria-selected={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>
