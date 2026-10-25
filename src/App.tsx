@@ -277,6 +277,40 @@ export default function App() {
   return (
     <div className="site-shell">
       <header className="site-header">
+        <div className="utility-bar">
+          <span>CARLETON UNIVERSITY <span aria-hidden="true">·</span> OTTAWA, ONTARIO</span>
+          <a className="utility-links" href={DONATIONS_URL} target="_blank" rel="noreferrer">Support the program <Icon name="arrow" size={14} /></a>
+        </div>
+        <div className="main-nav">
+          <Wordmark />
+          <nav className={`nav-links ${mobileOpen ? "is-open" : ""}`} id="primary-navigation" aria-label="Primary navigation">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                className={activeTab === tab.id ? "active" : ""}
+                aria-current={activeTab === tab.id ? "page" : undefined}
+                onClick={() => {
+                  setMobileOpen(false);
+                  selectTab(tab.id);
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+            <a className="nav-support" href={DONATIONS_URL} target="_blank" rel="noreferrer">Donate <Icon name="arrow" size={16} /></a>
+          </nav>
+          <button
+            className="menu-button"
+            type="button"
+            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <Icon name="menu" />
+          </button>
+        </div>
       </header>
 
       <main>
@@ -308,7 +342,7 @@ export default function App() {
         </section>
 
         <section className="team-nav-wrap" id="team-content">
-          <div className="team-title"></div>
+          <div className="team-title"><span>2026–27 SEASON</span><strong>Ravens Lacrosse</strong></div>
           <div className="team-tabs" role="tablist" aria-label="Team information">
             {tabs.map((tab) => (
               <button key={tab.id} className={activeTab === tab.id ? "active" : ""} type="button" role="tab" aria-selected={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>
@@ -328,6 +362,19 @@ export default function App() {
         </div>
       </main>
 
+      <footer className="site-footer-main">
+        <div className="footer-brand">
+          <Wordmark />
+          <p>Carleton University men’s lacrosse<br />Ottawa, Ontario · CUFLA East</p>
+        </div>
+        <nav className="footer-links" aria-label="Footer navigation">
+          {tabs.map((tab) => (
+            <button key={tab.id} type="button" onClick={() => selectTab(tab.id)}>{tab.label}</button>
+          ))}
+          <a href="mailto:carletonlacrosse@gmail.com">Contact</a>
+        </nav>
+        <a className="footer-donate" href={DONATIONS_URL} target="_blank" rel="noreferrer">Support the Ravens <Icon name="arrow" /></a>
+      </footer>
     </div>
   );
 }
