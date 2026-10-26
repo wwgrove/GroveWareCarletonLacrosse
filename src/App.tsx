@@ -338,8 +338,8 @@ function Overview({ onSelect }: { onSelect: (tab: Tab) => void }) {
       <section className="intro-section reveal">
         <div><div className="eyebrow dark">THE PROGRAM</div><h2><span>A TRADITION</span><span>SINCE 1986.</span></h2></div>
         <div className="intro-copy">
-          <p className="lead">Carleton Ravens Lacrosse competes in the Canadian University Field Lacrosse Association, bringing together high-level competition, academic ambition, and a proud club tradition.</p>
-          <p>The program was formed in 1986 for the first Ontario University Field Lacrosse Association spring tournament. Today, the Ravens compete in CUFLA’s East Division and pursue a place at the Baggataway Cup championship.</p>
+          <p className="lead">Carleton Ravens Lacrosse competes in the Canadian University Field Lacrosse Association, bringing together high-level competition, academic ambition, and a proud club culture.</p>
+          <p>The program was formed in 1986 for the first Ontario University Field Lacrosse Association spring tournament. Today, the Ravens compete in CUFLA’s East Division and pursue a place in the Baggataway Cup each season.</p>
           <button className="text-button" type="button" onClick={() => onSelect("roster")}>View the 2026–27 roster <Icon name="arrow" /></button>
         </div>
       </section>
@@ -434,7 +434,7 @@ function Stats() {
     savePercentage: 0.058333333333333334,
   };
   const recordParts = standings.record.split("-");
-  const displayRecord = `${recordParts[0] ?? "0"}–${recordParts[1] ?? "0"}`;
+  const displayRecord = `${recordParts[0] ?? "0"}\u00A0\u2013\u00A0${recordParts[1] ?? "0"}`;
   const ordinalSuffix = standings.rank % 100 >= 11 && standings.rank % 100 <= 13
     ? "TH"
     : standings.rank % 10 === 1 ? "ST" : standings.rank % 10 === 2 ? "ND" : standings.rank % 10 === 3 ? "RD" : "TH";
@@ -542,17 +542,17 @@ function Stats() {
       <div className="goalie-table-heading">GOALTENDING</div>
       <div className="player-stats-table goalie-stats-table" role="table" aria-label="Carleton Ravens goaltending statistics">
         <div className="player-stat-row player-stat-head goalie-stat-row" role="row">
-          <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">GP</span><span role="columnheader">W–L</span><span role="columnheader">SA</span><span role="columnheader">SV</span><span role="columnheader">GAA</span><span role="columnheader">SV%</span>
+          <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader">GP</span><span role="columnheader">W–L</span><span role="columnheader">SA</span><span role="columnheader">GA</span><span role="columnheader">GAA</span><span role="columnheader">SV%</span>
         </div>
         <div className="player-stat-row goalie-stat-row goalie-player-row" role="row">
           <span role="cell" className="jersey-number">{goalie.number}</span>
           <span role="cell" className="player-name">{goalie.name}</span>
-          <span role="cell">{goalie.gp}</span><span role="cell">{goalie.wins}–{goalie.losses}</span><span role="cell">{goalie.shotsAgainst}</span><span role="cell">{goalie.shotsAgainst - goalie.goalsAgainst}</span><span role="cell">{goalie.goalsAgainstAverage.toFixed(2)}</span><span role="cell">{goalie.savePercentage.toFixed(3).replace(/^0/, "")}</span>
+          <span role="cell">{goalie.gp}</span><span role="cell">{goalie.wins}–{goalie.losses}</span><span role="cell">{goalie.shotsAgainst}</span><span role="cell">{goalie.shotsAgainst - goalie.savePercentage * goalie.shotsAgainst}</span><span role="cell">{goalie.goalsAgainstAverage.toFixed(2)}</span><span role="cell">{(goalie.savePercentage * 100).toFixed(1)}</span>
         </div>
       </div>
 
       <div className="stats-source">
-        <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET DATA" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
+        <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET DATA" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "USING VERIFIED FALLBACK"}</strong></div>
         <p>{feedStatus === "live" ? "Roster, statistics, and schedule refresh every 30 minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
       </div>
     </section>
@@ -611,7 +611,7 @@ function Schedule() {
         </aside>
       </div>
       <div className="stats-source">
-        <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET FEED" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "VERIFIED FALLBACK"}</strong></div>
+        <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET FEED" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "USING VERIFIED FALLBACK"}</strong></div>
         <p>{feedStatus === "live" ? "Automatically refreshes every 30 minutes" : "The last verified schedule is shown while the live feed is unavailable"}</p>
       </div>
     </section>
