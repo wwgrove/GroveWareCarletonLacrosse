@@ -293,10 +293,13 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
   .hero-action-links .instagram-icon { width: 39px; height: 39px; }
   .hero-content { padding-bottom: 52px; }
   .hero h1 { max-width: 100%; font-size: clamp(50px,15vw,64px); line-height: .9; }
-  .hero-eyebrow-copy { display: flex; flex-direction: column; gap: 5px; }
+  .eyebrow { gap: 10px; margin-bottom: 14px; font-size: 12px; line-height: 1.3; letter-spacing: .18em; }
+  .eyebrow::before { flex: 0 0 28px; width: 28px; }
+  .hero-eyebrow-copy { display: flex; flex-direction: column; gap: 2px; }
   .hero-eyebrow-desktop { display: none; }
   .hero-eyebrow-mobile { display: block; }
-  .intro-section, .data-section { padding-top: 72px; padding-bottom: 72px; }
+  .intro-section, .data-section { padding-top: 48px; padding-bottom: 48px; }
+  .intro-section { gap: 28px; }
   .stat-band div { min-height: 135px; }
   .table-row { grid-template-columns: 72px 1fr; column-gap: 14px; padding: 0 20px; }
   .staff-card { grid-template-columns: 90px 1fr; align-items: center; }
