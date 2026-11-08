@@ -18,11 +18,11 @@ const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
+  { id: "recruiting", label: "Recruiting" },
   { id: "roster", label: "Roster" },
   { id: "stats", label: "Stats" },
   { id: "schedule", label: "Schedule" },
   { id: "staff", label: "Staff" },
-  { id: "recruiting", label: "Recruiting" },
 ];
 
 const playerStats: PlayerStat[] = [
