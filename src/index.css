@@ -42,7 +42,7 @@ button { cursor: pointer; }
 .hero-carousel { overflow: hidden; background: var(--ink); }
 .hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; opacity: 0; filter: saturate(.72) contrast(1.08); transform: scale(1.015); transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; }
 .hero-image.is-active { z-index: 1; opacity: 1; transform: scale(1); }
-.hero-carousel-toggle { position: absolute; z-index: 4; top: 170px; right: clamp(24px, 6vw, 90px); display: grid; width: 44px; height: 44px; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.7); color: var(--white); background: rgba(0,0,0,.72); }
+.hero-carousel-toggle { position: absolute; z-index: 4; right: clamp(24px, 6vw, 90px); bottom: 72px; display: grid; width: 44px; height: 44px; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.7); color: var(--white); background: rgba(0,0,0,.72); }
 .hero-carousel-toggle { position: absolute; overflow: hidden; border-radius: 50%; cursor: pointer; transition: transform 220ms cubic-bezier(.34,1.56,.64,1), background 220ms ease, border-color 220ms ease, box-shadow 220ms ease; }
 .hero-carousel-toggle:hover { transform: scale(1.1); border-color: var(--white); background: var(--raven-red); box-shadow: 0 0 0 6px rgba(233,28,36,.25); }
 .hero-carousel-toggle:active { transform: scale(.88); transition-duration: 90ms; }
@@ -269,7 +269,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
 
 @media (max-width: 900px) {
   .utility-links, .season-mark { display: none; }
-  .hero-carousel-toggle { top: 24px; }
+  .hero-carousel-toggle { top: 24px; bottom: auto; }
   .nav-links { position: absolute; top: 82px; right: 0; left: 0; display: none; flex-direction: column; align-items: flex-start; padding: 28px; background: var(--ink); }
   .nav-links.is-open { display: flex; }
   .menu-button { display: block; }
