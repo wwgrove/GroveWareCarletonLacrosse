@@ -38,8 +38,12 @@ button { cursor: pointer; }
 .menu-button { display: none; border: 0; color: var(--white); background: transparent; }
 
 .hero { position: relative; display: flex; min-height: 690px; align-items: flex-end; overflow: hidden; color: var(--white); background: var(--ink); }
-.hero-image, .hero-overlay, .hero-line { position: absolute; inset: 0; }
-.hero-image { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: saturate(.72) contrast(1.08); }
+.hero-carousel, .hero-overlay, .hero-line { position: absolute; inset: 0; }
+.hero-carousel { overflow: hidden; background: var(--ink); }
+.hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; opacity: 0; filter: saturate(.72) contrast(1.08); transform: scale(1.015); transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; }
+.hero-image.is-active { z-index: 1; opacity: 1; transform: scale(1); }
+.hero-carousel-toggle { position: absolute; z-index: 4; top: 170px; right: clamp(24px, 6vw, 90px); padding: 8px 12px; border: 1px solid rgba(255,255,255,.7); color: var(--white); background: rgba(0,0,0,.72); font-size: 12px; font-weight: 700; }
+.hero-carousel-toggle:focus-visible { outline: 3px solid var(--raven-red); outline-offset: 3px; }
 .hero-overlay { background: linear-gradient(90deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.62) 40%,rgba(0,0,0,.1) 78%), linear-gradient(0deg,rgba(0,0,0,.76) 0%,transparent 52%); }
 .hero-line { right: auto; width: 7px; background: var(--raven-red); transform: scaleY(0); transform-origin: bottom; animation: line-enter .8s .3s ease-out forwards; }
 .hero-action-links { position: absolute; z-index: 3; top: 48px; left: clamp(24px,6vw,90px); display: flex; align-items: center; gap: 18px; }
@@ -259,6 +263,7 @@ footer p { margin: 26px 0 0; color: #858585; font-size: 12px; }
 
 @media (max-width: 900px) {
   .utility-links, .season-mark { display: none; }
+  .hero-carousel-toggle { top: 24px; }
   .nav-links { position: absolute; top: 82px; right: 0; left: 0; display: none; flex-direction: column; align-items: flex-start; padding: 28px; background: var(--ink); }
   .nav-links.is-open { display: flex; }
   .menu-button { display: block; }
