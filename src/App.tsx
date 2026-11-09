@@ -1,6 +1,8 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { type GamesheetTeamData, type ScheduleGame, roster } from "./gamesheet.ts";
 import heroImage from "./assets/hero/SB20260927LAXGeeGeesAtRavens22jpg.webp";
+import playIcon from "./assets/icons/Play.svg";
+import pauseIcon from "./assets/icons/Pause.svg";
 
 type Tab = "overview" | "roster" | "stats" | "schedule" | "staff" | "recruiting";
 type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
@@ -24,32 +26,33 @@ const tabs: { id: Tab; label: string }[] = [
 ];
 
 const playerStats: PlayerStat[] = [
-  { number: "9", name: "Jenson White", gp: 6, goals: 14, assists: 1, points: 15, pim: 0 },
-  { number: "66", name: "Cooper Delorey", gp: 7, goals: 6, assists: 6, points: 12, pim: 0.5 },
-  { number: "21", name: "Griffin Armstrong", gp: 7, goals: 5, assists: 5, points: 10, pim: 2 },
-  { number: "44", name: "Logan Grant", gp: 7, goals: 4, assists: 5, points: 9, pim: 2.5 },
-  { number: "2", name: "Lucas Haddaway", gp: 7, goals: 2, assists: 2, points: 4, pim: 1 },
-  { number: "12", name: "Joshua Sweet", gp: 7, goals: 2, assists: 2, points: 4, pim: 5 },
-  { number: "15", name: "Jack Mullen", gp: 7, goals: 2, assists: 1, points: 3, pim: 0 },
-  { number: "14", name: "Terrance Barrina", gp: 6, goals: 1, assists: 0, points: 1, pim: 2.5 },
-  { number: "25", name: "Josh Brunton", gp: 7, goals: 0, assists: 1, points: 1, pim: 2.5 },
-  { number: "13", name: "Austin Fraser", gp: 7, goals: 1, assists: 0, points: 1, pim: 1 },
-  { number: "17", name: "Kian McGuigan", gp: 7, goals: 0, assists: 1, points: 1, pim: 1.5 },
-  { number: "6", name: "Liam O’Hagan", gp: 7, goals: 0, assists: 1, points: 1, pim: 0 },
-  { number: "35", name: "Jonah Steenbakkers", gp: 7, goals: 1, assists: 0, points: 1, pim: 0 },
-  { number: "27", name: "Noah Barker", gp: 0, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "31", name: "Alex D’Angelo", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "88", name: "Chris Edel", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "20", name: "Hayden Grant", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "19", name: "Elliot Holt", gp: 4, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "27", name: "Ryan McDonald", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "9", name: "Jenson White", gp: 9, goals: 16, assists: 5, points: 21, pim: 0 },
+  { number: "66", name: "Cooper Delorey", gp: 10, goals: 11, assists: 7, points: 18, pim: 1 },
+  { number: "21", name: "Griffin Armstrong", gp: 10, goals: 6, assists: 8, points: 14, pim: 2 },
+  { number: "44", name: "Logan Grant", gp: 9, goals: 7, assists: 6, points: 13, pim: 3.5 },
+  { number: "2", name: "Lucas Haddaway", gp: 10, goals: 6, assists: 4, points: 10, pim: 2 },
+  { number: "17", name: "Kian McGuigan", gp: 10, goals: 3, assists: 1, points: 4, pim: 4.5 },
+  { number: "15", name: "Jack Mullen", gp: 10, goals: 3, assists: 1, points: 4, pim: 0 },
+  { number: "12", name: "Joshua Sweet", gp: 10, goals: 2, assists: 2, points: 4, pim: 7.5 },
+  { number: "35", name: "Jonah Steenbakkers", gp: 10, goals: 1, assists: 1, points: 2, pim: 0 },
+  { number: "14", name: "Terrance Barrina", gp: 9, goals: 1, assists: 0, points: 1, pim: 4.5 },
+  { number: "25", name: "Josh Brunton", gp: 9, goals: 0, assists: 1, points: 1, pim: 2.5 },
+  { number: "13", name: "Austin Fraser", gp: 10, goals: 1, assists: 0, points: 1, pim: 3 },
+  { number: "6", name: "Liam O’Hagan", gp: 10, goals: 0, assists: 1, points: 1, pim: 0 },
+  { number: "99", name: "Noah Barker", gp: 1, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "24", name: "Sam Burns", gp: 2, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "8", name: "Alex D’Angelo", gp: 10, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "88", name: "Chris Edel", gp: 10, goals: 0, assists: 0, points: 0, pim: 2 },
+  { number: "20", name: "Hayden Grant", gp: 10, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "19", name: "Elliot Holt", gp: 5, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "27", name: "Ryan McDonald", gp: 10, goals: 0, assists: 0, points: 0, pim: 0 },
   { number: "3", name: "Matthew Melo", gp: 2, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "28", name: "Jacob Nassar", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "16", name: "Ryan Perry", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "29", name: "Evan Rheaume", gp: 7, goals: 0, assists: 0, points: 0, pim: 0 },
-  { number: "23", name: "Jack Richards", gp: 7, goals: 0, assists: 0, points: 0, pim: 2 },
-  { number: "86", name: "Chris Scissons", gp: 7, goals: 0, assists: 0, points: 0, pim: 10.5 },
-  { number: "55", name: "Carter Smith", gp: 7, goals: 0, assists: 0, points: 0, pim: 10.5 },
+  { number: "28", name: "Jacob Nassar", gp: 10, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "16", name: "Ryan Perry", gp: 10, goals: 0, assists: 0, points: 0, pim: 3 },
+  { number: "29", name: "Evan Reaume", gp: 10, goals: 0, assists: 0, points: 0, pim: 0 },
+  { number: "23", name: "Jack Richards", gp: 10, goals: 0, assists: 0, points: 0, pim: 2 },
+  { number: "86", name: "Chris Scissons", gp: 10, goals: 0, assists: 0, points: 0, pim: 17.5 },
+  { number: "55", name: "Carter Smith", gp: 10, goals: 0, assists: 0, points: 0, pim: 17 },
 ];
 
 const scheduleFallback: ScheduleGame[] = [
@@ -60,9 +63,9 @@ const scheduleFallback: ScheduleGame[] = [
   { date: "Sep 27, 2026", opponent: "Ottawa", venue: "Raven’s Road Field", game: "27", home: true, result: "L 9–21" },
   { date: "Oct 3, 2026", opponent: "Bishop’s", venue: "Coulter Field", game: "35", home: false, result: "L 2–14" },
   { date: "Oct 9, 2026", opponent: "Queen’s", venue: "Raven’s Road Field", game: "37", home: true, result: "L 7–13" },
-  { date: "Oct 16, 2026", opponent: "McGill", venue: "Molson Stadium", game: "45", home: false, result: "8:00 PM" },
-  { date: "Oct 23, 2026", opponent: "Queen’s", venue: "MikMac Field", game: "54", home: false, result: "7:00 PM" },
-  { date: "Oct 24, 2026", opponent: "Bishop’s", venue: "Raven’s Road Field", game: "57", home: true, result: "2:00 PM" },
+  { date: "Oct 16, 2026", opponent: "McGill", venue: "Molson Stadium", game: "45", home: false, result: "L 5–12" },
+  { date: "Oct 23, 2026", opponent: "Queen’s", venue: "MikMac Field", game: "54", home: false, result: "L 7–14" },
+  { date: "Oct 24, 2026", opponent: "Bishop’s", venue: "Raven’s Road Field", game: "57", home: true, result: "L 7–13" },
 ];
 
 const staff = [
@@ -207,8 +210,14 @@ function HeroCarousel() {
         ))}
       </div>
       {!reducedMotion && (
-        <button className="hero-carousel-toggle" type="button" onClick={() => setIsPlaying((playing) => !playing)}>
-          {isPlaying ? "Pause photos" : "Play photos"}
+        <button
+          className="hero-carousel-toggle"
+          type="button"
+          aria-label={isPlaying ? "Pause photos" : "Play photos"}
+          onClick={() => setIsPlaying((playing) => !playing)}
+        >
+          <img className={`toggle-icon ${isPlaying ? "is-shown" : ""}`} src={pauseIcon} alt="" aria-hidden="true" />
+          <img className={`toggle-icon ${isPlaying ? "" : "is-shown"}`} src={playIcon} alt="" aria-hidden="true" />
         </button>
       )}
     </>
@@ -354,7 +363,7 @@ function Roster() {
           ? `${rosterPlayers.length} athletes · Live Gamesheet feed · Refreshes every 30 minutes`
           : feedStatus === "loading"
             ? `${rosterPlayers.length} athletes · Refreshing Gamesheet`
-            : `${rosterPlayers.length} athletes · Verified fallback · September 2026`}
+            : `${rosterPlayers.length} athletes · Verified fallback · November 9, 2026`}
       </div>
       <div className="roster-table" role="table" aria-label="Carleton Ravens men's lacrosse roster">
         <div className="table-row table-head" role="row"><span role="columnheader">#</span><span role="columnheader">Player</span></div>
@@ -378,26 +387,26 @@ function Stats() {
   });
   const currentPlayerStats = data?.playerStats ?? playerStats;
   const standings = data?.standings ?? {
-    record: "0-7-0-0",
+    record: "0-10-0-0",
     points: 0,
     rank: 6,
     division: "East",
-    gamesPlayed: 7,
-    goalsFor: 38,
-    goalsAgainst: 113,
-    penaltyMinutes: 41.5,
+    gamesPlayed: 10,
+    goalsFor: 57,
+    goalsAgainst: 152,
+    penaltyMinutes: 73,
     powerPlayGoals: 1,
   };
   const goalie = data?.goalie ?? {
     number: "33",
     name: "Liam Clark",
-    gp: 7,
+    gp: 10,
     wins: 0,
-    losses: 7,
-    shotsAgainst: 120,
-    goalsAgainst: 113,
-    goalsAgainstAverage: 12.107142857142858,
-    savePercentage: 0.058333333333333334,
+    losses: 10,
+    shotsAgainst: 175,
+    goalsAgainst: 152,
+    goalsAgainstAverage: 11.4,
+    savePercentage: 0.13142857142857142,
   };
   const recordParts = standings.record.split("-");
   const displayRecord = `${recordParts[0] ?? "0"}\u00A0\u2013\u00A0${recordParts[1] ?? "0"}`;
@@ -519,7 +528,7 @@ function Stats() {
 
       <div className="stats-source">
         <div><span className={`live-dot ${feedStatus === "fallback" ? "is-fallback" : ""}`} /><strong>{feedStatus === "live" ? "LIVE GAMESHEET DATA" : feedStatus === "loading" ? "REFRESHING GAMESHEET" : "USING VERIFIED FALLBACK"}</strong></div>
-        <p>{feedStatus === "live" ? "Roster, statistics, and schedule refresh every 30 minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · September 2026"}</p>
+        <p>{feedStatus === "live" ? "Roster, statistics, and schedule refresh every 30 minutes" : "Verified from the supplied CUFLA 2026 Carleton team page · November 9, 2026"}</p>
       </div>
     </section>
   );
