@@ -1,6 +1,8 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { type GamesheetTeamData, type ScheduleGame, roster } from "./gamesheet.ts";
 import heroImage from "./assets/hero/SB20260927LAXGeeGeesAtRavens22jpg.webp";
+import playIcon from "./assets/icons/Play.svg";
+import pauseIcon from "./assets/icons/Pause.svg";
 
 type Tab = "overview" | "roster" | "stats" | "schedule" | "staff" | "recruiting";
 type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
@@ -208,8 +210,14 @@ function HeroCarousel() {
         ))}
       </div>
       {!reducedMotion && (
-        <button className="hero-carousel-toggle" type="button" onClick={() => setIsPlaying((playing) => !playing)}>
-          {isPlaying ? "Pause photos" : "Play photos"}
+        <button
+          className="hero-carousel-toggle"
+          type="button"
+          aria-label={isPlaying ? "Pause photos" : "Play photos"}
+          onClick={() => setIsPlaying((playing) => !playing)}
+        >
+          <img className={`toggle-icon ${isPlaying ? "is-shown" : ""}`} src={pauseIcon} alt="" aria-hidden="true" />
+          <img className={`toggle-icon ${isPlaying ? "" : "is-shown"}`} src={playIcon} alt="" aria-hidden="true" />
         </button>
       )}
     </>
