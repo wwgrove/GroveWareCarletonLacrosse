@@ -1,5 +1,6 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { type GamesheetTeamData, type ScheduleGame, roster } from "./gamesheet.ts";
+import heroImage from "./assets/hero/SB20260927LAXGeeGeesAtRavens22jpg.JPG";
 
 type Tab = "overview" | "roster" | "stats" | "schedule" | "staff" | "recruiting";
 type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
@@ -7,13 +8,8 @@ type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "point
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=carletonlacrosse%40gmail.com&ctz=America%2FNew_York";
 const DONATIONS_URL = "https://futurefunder.carleton.ca/giving-fund/mens-lacrosse-competitive-club-giving/";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
-const HERO_IMAGE_MODULES = import.meta.glob("./assets/hero/*.{jpg,jpeg,JPG,JPEG,png,webp,avif}", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
 const STAFF_PHOTO_MODULES = import.meta.glob("./assets/staff/*.{jpg,jpeg,JPG,JPEG,png,webp}", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
-const HERO_IMAGE_URLS = Object.values(HERO_IMAGE_MODULES);
 const PUBLIC_ASSET_BASE = import.meta.env.BASE_URL;
-const HERO_FALLBACK_IMAGE = `${PUBLIC_ASSET_BASE}ravens-lacrosse-hero.jpg`;
-const HERO_CACHE_KEY = "carleton-lacrosse-hero-images";
-const HERO_PERIOD_KEY = "carleton-lacrosse-hero-period";
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
 
 const tabs: { id: Tab; label: string }[] = [
@@ -147,108 +143,6 @@ function Wordmark() {
   );
 }
 
-function HeroCarousel() {
-  const [images, setImages] = useState<string[]>([HERO_FALLBACK_IMAGE]);
-  const [activeImage, setActiveImage] = useState(0);
-
-  useEffect(() => {
-    let active = true;
-    const now = new Date();
-    const periodStamp = [
-      now.getFullYear(),
-      String(now.getMonth() + 1).padStart(2, "0"),
-      String(now.getDate()).padStart(2, "0"),
-      now.getHours() < 12 ? "AM" : "PM",
-    ].join("-");
-
-    function readCachedImages() {
-      try {
-        const parsed = JSON.parse(localStorage.getItem(HERO_CACHE_KEY) ?? "[]");
-        return Array.isArray(parsed)
-          ? parsed.filter((value): value is string => typeof value === "string" && HERO_IMAGE_URLS.includes(value))
-          : [];
-      } catch {
-        return [];
-      }
-    }
-
-    function saveHeroCache(nextImages: string[]) {
-      try {
-        localStorage.setItem(HERO_CACHE_KEY, JSON.stringify(nextImages));
-        localStorage.setItem(HERO_PERIOD_KEY, periodStamp);
-      } catch {
-        // The carousel still works when storage is blocked or full.
-      }
-    }
-
-    function shuffleImages(sourceImages: string[]) {
-      const shuffled = [...sourceImages];
-      for (let index = shuffled.length - 1; index > 0; index -= 1) {
-        const randomIndex = Math.floor(Math.random() * (index + 1));
-        [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
-      }
-      return shuffled;
-    }
-
-    async function loadHeroImages() {
-      const cachedImages = readCachedImages();
-      let cachedPeriod = "";
-      try {
-        cachedPeriod = localStorage.getItem(HERO_PERIOD_KEY) ?? "";
-      } catch {
-        // Continue with the network request when local storage is unavailable.
-      }
-
-      if (cachedPeriod === periodStamp && cachedImages.length > 0) {
-        if (active) setImages(cachedImages);
-        return;
-      }
-
-      if (HERO_IMAGE_URLS.length === 0) {
-        if (active) setImages([HERO_FALLBACK_IMAGE]);
-        return;
-      }
-      const shuffledImages = shuffleImages(HERO_IMAGE_URLS);
-      saveHeroCache(shuffledImages);
-      if (active) setImages(shuffledImages);
-    }
-
-    loadHeroImages();
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    setActiveImage(0);
-    if (images.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const slideTimer = window.setInterval(() => {
-      setActiveImage((current) => (current + 1) % images.length);
-    }, 6000);
-    return () => window.clearInterval(slideTimer);
-  }, [images]);
-
-  useEffect(() => {
-    if (images.length < 2) return;
-    const nextImage = new Image();
-    nextImage.src = images[(activeImage + 1) % images.length];
-  }, [activeImage, images]);
-
-  return (
-    <div className="hero-carousel" role="img" aria-label="Carleton Ravens lacrosse action photography">
-      {images.map((source, index) => (
-        <img
-          className={`hero-image ${index === activeImage ? "is-active" : ""}`}
-          src={source}
-          alt=""
-          aria-hidden="true"
-          key={source}
-        />
-      ))}
-    </div>
-  );
-}
-
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -281,7 +175,7 @@ export default function App() {
 
       <main>
         <section className="hero">
-          <HeroCarousel />
+          <img className="hero-image" src={heroImage} alt="Carleton Ravens lacrosse action" fetchPriority="high" />
           <div className="hero-overlay" />
           <div className="hero-line" />
           <nav className="hero-action-links" aria-label="Carleton Lacrosse links">
