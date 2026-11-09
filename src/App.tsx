@@ -1,6 +1,6 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { type GamesheetTeamData, type ScheduleGame, roster } from "./gamesheet.ts";
-import heroImage from "./assets/hero/SB20260927LAXGeeGeesAtRavens22jpg.JPG";
+import heroImage from "./assets/hero/SB20260927LAXGeeGeesAtRavens22jpg.webp";
 
 type Tab = "overview" | "roster" | "stats" | "schedule" | "staff" | "recruiting";
 type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "points" | "pim";
@@ -8,6 +8,8 @@ type PlayerStatSortKey = "number" | "name" | "gp" | "goals" | "assists" | "point
 const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=carletonlacrosse%40gmail.com&ctz=America%2FNew_York";
 const DONATIONS_URL = "https://futurefunder.carleton.ca/giving-fund/mens-lacrosse-competitive-club-giving/";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZA9KBTMpQemyMZAavGbYbHaCg1oS0qaw8xMadHpcEvcpFkLDPEED-LWXnvmn40gvOw/exec";
+const HERO_IMAGE_MODULES = import.meta.glob("./assets/hero/*.webp", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
+const HERO_IMAGES = [heroImage, ...Object.values(HERO_IMAGE_MODULES).filter((image) => image !== heroImage)];
 const STAFF_PHOTO_MODULES = import.meta.glob("./assets/staff/*.{jpg,jpeg,JPG,JPEG,png,webp}", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
 const PUBLIC_ASSET_BASE = import.meta.env.BASE_URL;
 const RECRUITING_SUBMITTED_KEY = "carleton-lacrosse-recruiting-submitted";
@@ -143,6 +145,76 @@ function Wordmark() {
   );
 }
 
+function HeroCarousel() {
+  const [activeImage, setActiveImage] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<number[]>([0]);
+  const [firstImageReady, setFirstImageReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setReducedMotion(preference.matches);
+    updatePreference();
+    preference.addEventListener("change", updatePreference);
+    return () => preference.removeEventListener("change", updatePreference);
+  }, []);
+
+  useEffect(() => {
+    if (!firstImageReady || !isPlaying || reducedMotion || HERO_IMAGES.length < 2) return;
+
+    const nextIndex = (activeImage + 1) % HERO_IMAGES.length;
+    let timer: number;
+    let cancelled = false;
+    const nextImage = new Image();
+    nextImage.fetchPriority = "low";
+
+    const loadNext = () => {
+      nextImage.onload = () => {
+        if (cancelled) return;
+        setLoadedImages((loaded) => loaded.includes(nextIndex) ? loaded : [...loaded, nextIndex]);
+        timer = window.setTimeout(() => setActiveImage(nextIndex), 1000);
+      };
+      nextImage.onerror = () => {
+        console.error("Could not load hero carousel image:", HERO_IMAGES[nextIndex]);
+        if (!cancelled) timer = window.setTimeout(loadNext, 6000);
+      };
+      nextImage.src = HERO_IMAGES[nextIndex];
+    };
+
+    timer = window.setTimeout(loadNext, 5000);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      nextImage.onload = null;
+      nextImage.onerror = null;
+    };
+  }, [activeImage, firstImageReady, isPlaying, reducedMotion]);
+
+  return (
+    <>
+      <div className="hero-carousel" role="img" aria-label="Carleton Ravens lacrosse action photography">
+        {HERO_IMAGES.map((source, index) => loadedImages.includes(index) && (
+          <img
+            className={`hero-image ${index === activeImage ? "is-active" : ""}`}
+            src={source}
+            alt=""
+            aria-hidden="true"
+            fetchPriority={index === 0 ? "high" : "low"}
+            onLoad={index === 0 ? () => setFirstImageReady(true) : undefined}
+            key={source}
+          />
+        ))}
+      </div>
+      {!reducedMotion && (
+        <button className="hero-carousel-toggle" type="button" onClick={() => setIsPlaying((playing) => !playing)}>
+          {isPlaying ? "Pause photos" : "Play photos"}
+        </button>
+      )}
+    </>
+  );
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -175,7 +247,7 @@ export default function App() {
 
       <main>
         <section className="hero">
-          <img className="hero-image" src={heroImage} alt="Carleton Ravens lacrosse action" fetchPriority="high" />
+          <HeroCarousel />
           <div className="hero-overlay" />
           <div className="hero-line" />
           <nav className="hero-action-links" aria-label="Carleton Lacrosse links">
