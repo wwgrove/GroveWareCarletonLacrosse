@@ -117,6 +117,7 @@ export const roster = [
   { number: "2", name: "Lucas Haddaway" },
   { number: "3", name: "Matthew Melo" },
   { number: "6", name: "Liam O’Hagan" },
+  { number: "8", name: "Alex D’Angelo" },
   { number: "9", name: "Jenson White" },
   { number: "12", name: "Joshua Sweet" },
   { number: "13", name: "Austin Fraser" },
@@ -128,12 +129,11 @@ export const roster = [
   { number: "20", name: "Hayden Grant" },
   { number: "21", name: "Griffin Armstrong" },
   { number: "23", name: "Jack Richards" },
+  { number: "24", name: "Sam Burns" },
   { number: "25", name: "Josh Brunton" },
-  { number: "27", name: "Noah Barker" },
   { number: "27", name: "Ryan McDonald" },
   { number: "28", name: "Jacob Nassar" },
-  { number: "29", name: "Evan Rheaume" },
-  { number: "31", name: "Alex D’Angelo" },
+  { number: "29", name: "Evan Reaume" },
   { number: "33", name: "Liam Clark" },
   { number: "35", name: "Jonah Steenbakkers" },
   { number: "44", name: "Logan Grant" },
@@ -141,6 +141,7 @@ export const roster = [
   { number: "66", name: "Cooper Delorey" },
   { number: "86", name: "Chris Scissons" },
   { number: "88", name: "Chris Edel" },
+  { number: "99", name: "Noah Barker" },
 ];
 
 export function parseGamesheetTeamData(html: string): GamesheetTeamData {
